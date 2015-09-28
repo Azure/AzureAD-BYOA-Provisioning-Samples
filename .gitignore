@@ -12,7 +12,6 @@
 
 # VSMSBuild generated files in CoreXT
 *.projhash*
-*.sln
 *.slnhash*
 *.suo
 
