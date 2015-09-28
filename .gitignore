@@ -1,0 +1,40 @@
+
+
+
+# Build generated files in src
+**/objd/**/*
+**/obj/**/*
+**/bin/**/*
+**/gen/**/*
+**/loc_gen/**/*
+**/*.nuspec
+**/StyleCop.Cache
+
+# VSMSBuild generated files in CoreXT
+*.projhash*
+*.sln
+*.slnhash*
+*.suo
+
+# Build.exe
+*.err
+*.wrn
+*.log
+*.prf
+*.trc
+buildd.dbb
+build.dbb
+buildd.evt
+build.evt
+
+#Custom
+*.csproj.*
+**/Fakes/madcu/**
+**/TestResults/**
+**/bins/**
+**/target/**
+**/_ReSharper*.dirs/**
+
+#Nuget Packages Folder
+**/packages/*
+
