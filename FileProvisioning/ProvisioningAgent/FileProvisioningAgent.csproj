@@ -130,6 +130,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileProviderBase.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MembersColumnsFactory.cs" />
     <Compile Include="GroupFactory.cs" />

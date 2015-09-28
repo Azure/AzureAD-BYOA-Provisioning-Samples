@@ -84,7 +84,7 @@ namespace Samples
 
             string fileName = CommaDelimitedFileUnitTest.ComposeFileName();
 
-            IFileProvider provider = null;
+            FileProviderBase provider = null;
             try
             {
                 provider = new FileProvider(fileName);
@@ -185,7 +185,7 @@ namespace Samples
 
             string fileName = CommaDelimitedFileUnitTest.ComposeFileName();
 
-            IFileProvider provider = null;
+            FileProviderBase provider = null;
             try
             {
                 provider = new FileProvider(fileName);

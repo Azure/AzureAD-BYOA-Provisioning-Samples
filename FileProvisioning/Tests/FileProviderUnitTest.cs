@@ -11,13 +11,13 @@ namespace Samples
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class FileProviderUnitTest: ProviderTestTemplate<IFileProvider>
+    public class FileProviderUnitTest: ProviderTestTemplate<FileProviderBase>
     {
-        public override IFileProvider CreateProvider()
+        public override FileProviderBase CreateProvider()
         {
             string fileName = CommaDelimitedFileUnitTest.ComposeFileName();
-            
-            IFileProvider result = null;
+
+            FileProviderBase result = null;
             try
             {
                 result = new FileProvider(fileName);
@@ -35,10 +35,10 @@ namespace Samples
             }
         }
 
-        public override async Task RunTest(Func<IProvider, Task> testFunction)
+        public override async Task RunTest(Func<ProviderBase, Task> testFunction)
         {
             Assert.IsNotNull(testFunction);
-            IFileProvider provider = null;
+            FileProviderBase provider = null;
             string filePath = null;
             try
             {

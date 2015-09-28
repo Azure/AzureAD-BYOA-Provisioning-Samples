@@ -17,11 +17,10 @@ namespace Samples
     using Microsoft.SystemForCrossDomainIdentityManagement;
     using Samples.Properties;
     
-    public class FileProvider: IFileProvider
+    public class FileProvider: FileProviderBase, IDisposable
     {
         private const string ArgumentNameColumnNames = "columnNames";
         private const string ArgumentNameCorrelationIdentifier = "correlationIdentifier";
-        private const string ArgumentNameFilePath = "filePath";
         private const string ArgumentNameIdentifier = "identifier";
         private const string ArgumentNameParameters = "parameters";
         private const string ArgumentNamePatch = "patch";
@@ -47,12 +46,8 @@ namespace Samples
         private ITabularFileAdapter file;
 
         public FileProvider(string filePath)
+            :base(filePath)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-            {
-                throw new ArgumentNullException(FileProvider.ArgumentNameFilePath);
-            }
-
             Type typeAttributeNames = typeof(AttributeNames);
             this.attributeNames =
                 typeAttributeNames.GetFields(BindingFlags.Public | BindingFlags.Static)
@@ -61,18 +56,10 @@ namespace Samples
                         (string)item.GetValue(null))
                 .ToArray();
 
-            this.file = new CommaDelimitedFileAdapter(filePath, attributeNames);
+            this.file = new CommaDelimitedFileAdapter(this.FilePath, attributeNames);
         }
 
-        public string FilePath
-        {
-            get
-            {
-                return this.file.FilePath;
-            }
-        }
-
-        public Action<IAppBuilder, HttpConfiguration> StartupBehavior
+        public override Action<IAppBuilder, HttpConfiguration> StartupBehavior
         {
             get 
             {
@@ -80,7 +67,7 @@ namespace Samples
             }
         }
 
-        public async Task<Resource> Create(Resource resource, string correlationIdentifier)
+        public override async Task<Resource> Create(Resource resource, string correlationIdentifier)
         {
             if (null == resource)
             {
@@ -156,7 +143,7 @@ namespace Samples
             return result;
         }
 
-        public async Task Delete(IResourceIdentifier resourceIdentifier, string correlationIdentifier)
+        public override async Task Delete(IResourceIdentifier resourceIdentifier, string correlationIdentifier)
         {
             if (null == resourceIdentifier)
             {
@@ -184,30 +171,31 @@ namespace Samples
             await this.file.RemoveRow(resourceIdentifier.Identifier);
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            if (!disposing)
+            try
             {
-                return;
-            }
-
-            if (this.file != null)
-            {
-                lock (this.thisLock)
+                if (!disposing)
                 {
-                    if (this.file != null)
+                    return;
+                }
+
+                if (this.file != null)
+                {
+                    lock (this.thisLock)
                     {
-                        this.file.Dispose();
-                        this.file = null;
+                        if (this.file != null)
+                        {
+                            this.file.Dispose();
+                            this.file = null;
+                        }
                     }
                 }
             }
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
+            finally
+            {
+                base.Dispose(true);
+            }
         }
 
         private static IRow FilterColumns(IRow row, IReadOnlyCollection<string> columnNames)
@@ -313,7 +301,7 @@ namespace Samples
         {
         }
 
-        public async Task<Resource[]> Query(IQueryParameters parameters, string correlationIdentifier)
+        public override async Task<Resource[]> Query(IQueryParameters parameters, string correlationIdentifier)
         {
             if (null == parameters)
             {
@@ -616,7 +604,7 @@ namespace Samples
             return results;
         }
 
-        public async Task<Resource> Retrieve(IResourceRetrievalParameters parameters, string correlationIdentifier)
+        public override async Task<Resource> Retrieve(IResourceRetrievalParameters parameters, string correlationIdentifier)
         {
             if (null == parameters)
             {
@@ -688,7 +676,7 @@ namespace Samples
             return result;
         }
 
-        public async Task Update(IPatch patch, string correlationIdentifier)
+        public override async Task Update(IPatch patch, string correlationIdentifier)
         {
             if (null == patch)
             {

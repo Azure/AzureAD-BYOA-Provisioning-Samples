@@ -12,7 +12,7 @@ namespace Samples
     using Microsoft.SystemForCrossDomainIdentityManagement;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    public abstract class ProviderTestTemplate<TProvider> where TProvider: IProvider
+    public abstract class ProviderTestTemplate<TProvider> where TProvider: ProviderBase
     {
         public const int CountMembers = 2;
 
@@ -273,11 +273,11 @@ namespace Samples
 
         public abstract TProvider CreateProvider();
 
-        public virtual async Task RunTest(Func<IProvider, Task> testFunction)
+        public virtual async Task RunTest(Func<ProviderBase, Task> testFunction)
         {
             Assert.IsNotNull(testFunction);
 
-            IProvider provider = this.CreateProvider();
+            ProviderBase provider = this.CreateProvider();
             await testFunction(provider);
         }
 
@@ -286,9 +286,9 @@ namespace Samples
         [TestCategory(TestCategory.Sample)]
         public async Task TestCreateGroup()
         {
-            Func<IProvider, Task> testFunction =
-                new Func<IProvider, Task>(
-                    async (IProvider provider) =>
+            Func<ProviderBase, Task> testFunction =
+                new Func<ProviderBase, Task>(
+                    async (ProviderBase provider) =>
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
@@ -338,9 +338,9 @@ namespace Samples
         [TestCategory(TestCategory.Sample)]
         public async Task TestCreateUser()
         {
-            Func<IProvider, Task> testFunction =
-                new Func<IProvider, Task>(
-                    async (IProvider provider) =>
+            Func<ProviderBase, Task> testFunction =
+                new Func<ProviderBase, Task>(
+                    async (ProviderBase provider) =>
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
@@ -363,9 +363,9 @@ namespace Samples
         [TestCategory(TestCategory.Sample)]
         public async Task TestDelete()
         {
-            Func<IProvider, Task> testFunction =
-                new Func<IProvider, Task>(
-                    async (IProvider provider) =>
+            Func<ProviderBase, Task> testFunction =
+                new Func<ProviderBase, Task>(
+                    async (ProviderBase provider) =>
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
@@ -390,9 +390,9 @@ namespace Samples
         [TestCategory(TestCategory.Sample)]
         public async Task TestQuery()
         {
-            Func<IProvider, Task> testFunction =
-                new Func<IProvider, Task>(
-                    async (IProvider provider) =>
+            Func<ProviderBase, Task> testFunction =
+                new Func<ProviderBase, Task>(
+                    async (ProviderBase provider) =>
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
@@ -433,9 +433,9 @@ namespace Samples
         [TestCategory(TestCategory.Sample)]
         public async Task TestRetrieve()
         {
-            Func<IProvider, Task> testFunction =
-                new Func<IProvider, Task>(
-                    async (IProvider provider) =>
+            Func<ProviderBase, Task> testFunction =
+                new Func<ProviderBase, Task>(
+                    async (ProviderBase provider) =>
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
@@ -468,9 +468,9 @@ namespace Samples
         [TestCategory(TestCategory.Sample)]
         public async Task TestUpdateUser()
         {
-            Func<IProvider, Task> testFunction =
-                new Func<IProvider, Task>(
-                    async (IProvider provider) =>
+            Func<ProviderBase, Task> testFunction =
+                new Func<ProviderBase, Task>(
+                    async (ProviderBase provider) =>
                     {
                         PatchRequest2 patchRequest = ProviderTestTemplate<TProvider>.ComposeUserPatch();
 
@@ -506,9 +506,9 @@ namespace Samples
         [TestCategory(TestCategory.Sample)]
         public async Task TestUpdateManager()
         {
-            Func<IProvider, Task> testFunction =
-                new Func<IProvider, Task>(
-                    async (IProvider provider) =>
+            Func<ProviderBase, Task> testFunction =
+                new Func<ProviderBase, Task>(
+                    async (ProviderBase provider) =>
                     {
                         string correlationIdentifier;
 
@@ -625,9 +625,9 @@ namespace Samples
         [TestCategory(TestCategory.Sample)]
         public async Task TestUpdateMembers()
         {
-            Func<IProvider, Task> testFunction =
-                new Func<IProvider, Task>(
-                    async (IProvider provider) =>
+            Func<ProviderBase, Task> testFunction =
+                new Func<ProviderBase, Task>(
+                    async (ProviderBase provider) =>
                     {
                         string correlationIdentifier;
 

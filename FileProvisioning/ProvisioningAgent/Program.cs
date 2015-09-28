@@ -43,7 +43,7 @@ namespace Samples
             Console.WriteLine(informationBaseAddress);
 
             IMonitor monitor = new ConsoleMonitor();
-            IFileProvider provider = null;
+            FileProviderBase provider = null;
             try
             {
                 provider = new FileProvider(arguments[1]);
