@@ -75,13 +75,13 @@
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Protocol">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.37\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Protocol.dll</HintPath>
+      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.58\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Protocol.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Schemas">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.37\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Schemas.dll</HintPath>
+      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.58\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Schemas.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Service">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.37\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Service.dll</HintPath>
+      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.58\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Service.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Threading, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

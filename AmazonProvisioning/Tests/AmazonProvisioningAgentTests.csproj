@@ -84,15 +84,15 @@
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Protocol, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.37\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Protocol.dll</HintPath>
+      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.58\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Protocol.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Schemas, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.37\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Schemas.dll</HintPath>
+      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.58\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Schemas.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Service, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.37\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Service.dll</HintPath>
+      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.1.0.130.58\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Service.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>True</Private>

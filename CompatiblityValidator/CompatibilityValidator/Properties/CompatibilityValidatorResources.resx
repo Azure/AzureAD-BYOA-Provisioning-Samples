@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ExceptionInvalidAddressTemplate" xml:space="preserve">
+    <value>This argument is not a valid uniform resource identifier: {0}</value>
+  </data>
+  <data name="ExceptionInvalidFilteringAttributeName" xml:space="preserve">
+    <value>This attribute name is not supported for filtering: {0}</value>
+  </data>
+  <data name="ExceptionInvalidManagerAttributeValueTemplate" xml:space="preserve">
+    <value>This manager attribute value is invalid: {0}</value>
+  </data>
+  <data name="ExceptionInvalidVersionTemplate" xml:space="preserve">
+    <value>This argument is not a valid version number: {0}</value>
+  </data>
+  <data name="InformationRequestTemplate" xml:space="preserve">
+    <value>Request: 
+    Resource: {0}
+    Operation: {1}
+    Headers: {2}
+    Content Type: {3}
+    Data: {4}</value>
+  </data>
+  <data name="InformationResponseTemplate" xml:space="preserve">
+    <value>Response: 
+    Resource: {0}
+    Operation: {1}
+   {2}</value>
+  </data>
+  <data name="InformationResponseValueTemplate" xml:space="preserve">
+    <value>Response: 
+{0}</value>
+  </data>
+  <data name="InformationUsage" xml:space="preserve">
+    <value>Usage: SCIMCV &lt;a domain name, such as "contoso.com"&gt; &lt;the base address of the service, such as "https://localhost:9000"&gt; &lt;an OAuth bearer token&gt; &lt;1.0|1.1|2.0&gt; [true if group compatibility is to be tested, otherwise false] [the name of the user filtering attribute, which, by default, is externalId] [the name of the group filtering attribute, which, by default, is externalId]</value>
+  </data>
+  <data name="WarningCustomGroupFilterTemplate" xml:space="preserve">
+    <value>This attribute can be used to query groups: {0}.  However, because it is not the default attribute for querying groups, which is externalId, tenant administrators will have to edit the default schema to select {0} as the attribute for matching users in Azure Active Directory to groups at the specified endpoint.   </value>
+  </data>
+  <data name="WarningCustomUserFilterTemplate" xml:space="preserve">
+    <value>This attribute can be used to query users: {0}.  However, because it is not the default attribute for querying users, which is externalId, tenant administrators will have to edit the default schema to select {0} as the attribute for matching users in Azure Active Directory to users at the specified endpoint.   </value>
+  </data>
+  <data name="WarningDeserializationFailed" xml:space="preserve">
+    <value>The response to request to the endpoint could not be parsed.  The endpoint cannot be integrated with Azure Active Directory.  </value>
+  </data>
+  <data name="WarningGroupCreationFailed" xml:space="preserve">
+    <value>A group could not be created.  Testing of group integration cannot continue.    
+
+If investigation of the failure reveals that the problem is that the request to create the group included attributes that the endpoint cannot accept, then one could edit the source code of this program to exclude those attributes.  In that case, integration with Azure Active Directory is possible, provided tenant administrators edit the default group schema to exclude the unsupported attributes.  </value>
+  </data>
+  <data name="WarningGroupDeletionFailed" xml:space="preserve">
+    <value>A request to delete a group failed.  The endpoint cannot be integrated with Azure Active Directory.</value>
+  </data>
+  <data name="WarningGroupQueryFailedTemplate" xml:space="preserve">
+    <value>Querying for a group by this filtering attribute failed: {0}.  If a different group filtering attribute is supported, then supply the name of that attribute to this program as an optional parameter.  
+    {0}</value>
+  </data>
+  <data name="WarningGroupRetrievalFailed" xml:space="preserve">
+    <value>A request to retrieve a group failed.  The endpoint cannot be integrated with Azure Active Directory.  </value>
+  </data>
+  <data name="WarningGroupTestSkipped" xml:space="preserve">
+    <value>The test for group integration is being skipped.  If the endpoint does not support group provisioning, then it can be integrated with Azure Active Directory, provided tenant administrators edit the default schema to exclude groups.  </value>
+  </data>
+  <data name="WarningGroupUpdateFailed" xml:space="preserve">
+    <value>A request to update a group failed.  The endpoint cannot be integrated with Azure Active Directory.</value>
+  </data>
+  <data name="WarningManagerAttributeNotSupported" xml:space="preserve">
+    <value>The "manager" attribute does not appear to be supported.  The endpoint can be integrated with Azure Active Directory, provided tenant administrators edit the default user schema to exclude that attribute.  </value>
+  </data>
+  <data name="WarningReferenceQueryFailedTemplate" xml:space="preserve">
+    <value>Querying for a resource with a given identifier and value for this reference attribute failed: {0}.  The endpoint can be integrated with Azure Active Directory, provided tenant administrators edit the default schema to exclude that attribute.  </value>
+  </data>
+  <data name="WarningUserCreationFailed" xml:space="preserve">
+    <value>A user could not be created.  Testing cannot continue.    
+
+If investigation of the failure reveals that the problem is that the request to create the user included attributes that the endpoint cannot accept, then one could edit the source code of this program to exclude those attributes.  In that case, integration with Azure Active Directory is possible, provided tenant administrators edit the default user schema to exclude the unsupported attributes.  </value>
+  </data>
+  <data name="WarningUserDeletionFailed" xml:space="preserve">
+    <value>A request to delete a user failed.  The endpoint cannot be integrated with Azure Active Directory.</value>
+  </data>
+  <data name="WarningUserQueryFailedTemplate" xml:space="preserve">
+    <value>Querying for a user by this filtering attribute failed: {0}.  If a different user filtering attribute is supported, then supply the name of that attribute to this program as an optional parameter.  
+    {0}</value>
+  </data>
+  <data name="WarningUserRetrievalFailed" xml:space="preserve">
+    <value>A request to retrieve a user failed.  The endpoint cannot be integrated with Azure Active Directory.  </value>
+  </data>
+  <data name="WarningUserUpdateFailed" xml:space="preserve">
+    <value>A request to update a user failed.  The endpoint cannot be integrated with Azure Active Directory.</value>
+  </data>
+</root>
