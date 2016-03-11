@@ -31,6 +31,8 @@ namespace Samples
 
         private const string FormatUniqueIdentifierCompressed = "N";
 
+        private const string FormattedNameTemplate = "{0} {1}";
+
         // addresses[type eq "Work"].postalCode
         public const string PathExpressionPostalCode =
             AttributeNames.ElectronicMailAddresses +
@@ -211,6 +213,11 @@ namespace Samples
             result.Name = new Name();
             result.Name.FamilyName = values[0];
             result.Name.GivenName = values[0];
+            result.Name.Formatted = String.Format(
+                CultureInfo.InvariantCulture,
+                ProviderTestTemplate<TProvider>.FormattedNameTemplate, 
+                result.Name.GivenName, 
+                result.Name.FamilyName);
 
             Address workAddress = new Address();
             workAddress.ItemType = Address.Work;

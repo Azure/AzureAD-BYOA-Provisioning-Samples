@@ -71,7 +71,7 @@ namespace Samples
 
                 if (!string.IsNullOrWhiteSpace(this.Resource.Name.GivenName))
                 {
-                    result.Add(AttributeNames.Formatted, this.Resource.Name.GivenName);
+                    result.Add(AttributeNames.GivenName, this.Resource.Name.GivenName);
                 }
             }
 
