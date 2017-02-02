@@ -14,269 +14,15 @@ namespace Samples
 
     public abstract class ProviderTestTemplate<TProvider> where TProvider: ProviderBase
     {
-        public const int CountMembers = 2;
-
-        private const string Domain = "contoso.com";
-        private const long FictitiousPhoneNumber = 5551234560;
-
-        private static readonly string ElectronicMailAddressTemplate = "{0}@" + ProviderTestTemplate<TProvider>.Domain;
+        private const int CountMembers = 2;
 
         // externalId eq "{0}"
-        public const string FilterByExternalIdentifierExpressionTemplate =
+        private const string FilterByExternalIdentifierExpressionTemplate =
             AttributeNames.ExternalIdentifier + " eq \"{0}\"";
 
         // id eq 123 and manager eq 456
-        public const string FilterByReferenceExpressionTemplate =
+        private const string FilterByReferenceExpressionTemplate =
             AttributeNames.Identifier + " eq {0} and {1} eq {2}";
-
-        private const string FormatUniqueIdentifierCompressed = "N";
-
-        private const string FormattedNameTemplate = "{0} {1}";
-
-        // addresses[type eq "Work"].postalCode
-        public const string PathExpressionPostalCode =
-            AttributeNames.ElectronicMailAddresses +
-            "[" + AttributeNames.Type +
-            " eq \"" +
-            ElectronicMailAddress.Work +
-            "]." +
-            AttributeNames.PostalCode;
-
-        // emails[type eq "Work" and Primary eq true]
-        public const string PathExpressionPrimaryWorkElectronicMailAddress =
-            AttributeNames.ElectronicMailAddresses +
-            "[" + AttributeNames.Type +
-            " eq \"" +
-            ElectronicMailAddress.Work +
-            "\" and " +
-            AttributeNames.Primary +
-            " eq true]";
-
-        public static WindowsAzureActiveDirectoryGroup ComposeGroupResource()
-        {
-            string value = Guid.NewGuid().ToString(ProviderTestTemplate<TProvider>.FormatUniqueIdentifierCompressed);
-
-            WindowsAzureActiveDirectoryGroup result = new WindowsAzureActiveDirectoryGroup();
-            result.Identifier = Guid.NewGuid().ToString();
-            result.ExternalIdentifier = value;
-
-            return result;
-        }
-
-        public static PatchRequest2 ComposeReferencePatch(
-            string referenceAttributeName,
-            string referencedObjectUniqueIdentifier,
-            OperationName operationName)
-        {
-            Assert.IsFalse(string.IsNullOrWhiteSpace(referenceAttributeName));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(referencedObjectUniqueIdentifier));
-
-            IPath path;
-            Assert.IsTrue(Path.TryParse(referenceAttributeName, out path));
-            OperationValue operationValue =
-                new OperationValue()
-                {
-                    Value = referencedObjectUniqueIdentifier
-                };
-            PatchOperation operation =
-                new PatchOperation()
-                {
-                    Name = operationName,
-                    Path = path
-                };
-            operation.AddValue(operationValue);
-
-            PatchRequest2 result = new PatchRequest2();
-            result.AddOperation(operation);
-            return result;
-        }
-
-        public static PatchRequest2 ComposeUserPatch()
-        {
-            string value = Guid.NewGuid().ToString(ProviderTestTemplate<TProvider>.FormatUniqueIdentifierCompressed);
-
-            IPath path;
-            PatchOperation operation;
-            OperationValue operationValue;
-
-            PatchRequest2 result = new PatchRequest2();
-
-            Assert.IsTrue(Path.TryParse(AttributeNames.Active, out path));
-            operationValue =
-                new OperationValue()
-                {
-                    Value = bool.FalseString
-                };
-            operation =
-                new PatchOperation()
-                {
-                    Name = OperationName.Replace,
-                    Path = path
-                };
-            operation.AddValue(operationValue);
-            result.AddOperation(operation);
-
-            Assert.IsTrue(Path.TryParse(AttributeNames.DisplayName, out path));
-            operationValue =
-                new OperationValue()
-                {
-                    Value = value
-                };
-            operation =
-                new PatchOperation()
-                {
-                    Name = OperationName.Replace,
-                    Path = path
-                };
-            operation.AddValue(operationValue);
-            result.AddOperation(operation);
-
-            Assert.IsTrue(Path.TryParse(ProviderTestTemplate<TProvider>.PathExpressionPrimaryWorkElectronicMailAddress, out path));
-            string electronicMailAddressValue =
-                string.Format(
-                    CultureInfo.InvariantCulture,
-                    ProviderTestTemplate<TProvider>.ElectronicMailAddressTemplate,
-                    value);
-            operationValue =
-                new OperationValue()
-                {
-                    Value = electronicMailAddressValue
-                };
-            operation =
-                new PatchOperation()
-                {
-                    Name = OperationName.Replace,
-                    Path = path
-                };
-            operation.AddValue(operationValue);
-            result.AddOperation(operation);
-
-            Assert.IsTrue(Path.TryParse(ProviderTestTemplate<TProvider>.PathExpressionPostalCode, out path));
-            operationValue =
-                new OperationValue()
-                {
-                    Value = value
-                };
-            operation =
-                new PatchOperation()
-                {
-                    Name = OperationName.Replace,
-                    Path = path
-                };
-            operation.AddValue(operationValue);
-            result.AddOperation(operation);
-
-            return result;
-        }
-
-        public static Resource ComposeUserResource()
-        {
-            int countValues = 4;
-            IList<string> values = new List<string>(countValues);
-            for (int valueIndex = 0; valueIndex < countValues; valueIndex++)
-            {
-                string value = Guid.NewGuid().ToString(ProviderTestTemplate<TProvider>.FormatUniqueIdentifierCompressed);
-                values.Add(value);
-            }
-
-            ElectronicMailAddress electronicMailAddress = new ElectronicMailAddress();
-            electronicMailAddress.ItemType = ElectronicMailAddress.Work;
-            electronicMailAddress.Primary = false;
-            electronicMailAddress.Value =
-                string.Format(
-                    CultureInfo.InvariantCulture,
-                    ProviderTestTemplate<TProvider>.ElectronicMailAddressTemplate,
-                    values[1]);
-
-            int countProxyAddresses = 2;
-            IList<ElectronicMailAddress> proxyAddresses = new List<ElectronicMailAddress>(countProxyAddresses);
-            for (int proxyAddressIndex = 0; proxyAddressIndex < countProxyAddresses; proxyAddressIndex++)
-            {
-                ElectronicMailAddress proxyAddress = new ElectronicMailAddress();
-                proxyAddress.ItemType = ElectronicMailAddress.Other;
-                proxyAddress.Primary = false;
-                proxyAddress.Value =
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        ProviderTestTemplate<TProvider>.ElectronicMailAddressTemplate,
-                        values[2 + proxyAddressIndex]);
-                proxyAddresses.Add(proxyAddress);
-            }
-
-            Core2EnterpriseUser result = new Core2EnterpriseUser();
-
-            result.Identifier = Guid.NewGuid().ToString();
-            result.ExternalIdentifier = values[0];
-            result.Active = true;
-            result.DisplayName = values[0];
-
-            result.Name = new Name();
-            result.Name.FamilyName = values[0];
-            result.Name.GivenName = values[0];
-            result.Name.Formatted = String.Format(
-                CultureInfo.InvariantCulture,
-                ProviderTestTemplate<TProvider>.FormattedNameTemplate, 
-                result.Name.GivenName, 
-                result.Name.FamilyName);
-
-            Address workAddress = new Address();
-            workAddress.ItemType = Address.Work;
-            workAddress.StreetAddress = values[0];
-            workAddress.PostalCode = values[0];
-
-            Address officeLocation = new Address();
-            officeLocation.ItemType = Address.Other;
-            officeLocation.Primary = false;
-            officeLocation.Formatted = values[0];
-
-            PhoneNumber phoneNumberWork = new PhoneNumber();
-            phoneNumberWork.ItemType = PhoneNumber.Work;
-            phoneNumberWork.Value = ProviderTestTemplate<TProvider>.FictitiousPhoneNumber.ToString(CultureInfo.InvariantCulture);
-
-            PhoneNumber phoneNumberMobile = new PhoneNumber();
-            phoneNumberMobile.ItemType = PhoneNumber.Mobile;
-            phoneNumberMobile.Value = (ProviderTestTemplate<TProvider>.FictitiousPhoneNumber + 1).ToString(CultureInfo.InvariantCulture);
-
-            PhoneNumber phoneNumberFacsimile = new PhoneNumber();
-            phoneNumberFacsimile.ItemType = PhoneNumber.Fax;
-            phoneNumberFacsimile.Value = (ProviderTestTemplate<TProvider>.FictitiousPhoneNumber + 2).ToString(CultureInfo.InvariantCulture);
-
-            PhoneNumber phoneNumberPager = new PhoneNumber();
-            phoneNumberPager.ItemType = PhoneNumber.Pager;
-            phoneNumberPager.Value = (ProviderTestTemplate<TProvider>.FictitiousPhoneNumber + 3).ToString(CultureInfo.InvariantCulture);
-
-            result.UserName =
-                string.Format(
-                    CultureInfo.InvariantCulture,
-                    ProviderTestTemplate<TProvider>.ElectronicMailAddressTemplate,
-                    values[0]);
-
-            result.Addresses =
-                new Address[]
-                    {
-                        workAddress,
-                        officeLocation
-                    };
-
-            result.ElectronicMailAddresses =
-                new ElectronicMailAddress[]
-                    {
-                        electronicMailAddress,
-                    }
-                    .Union(proxyAddresses)
-                    .ToArray();
-
-            result.PhoneNumbers =
-                new PhoneNumber[]
-                {
-                    phoneNumberWork,
-                    phoneNumberFacsimile,
-                    phoneNumberMobile,
-                    phoneNumberPager
-                };
-
-            return result;
-        }
 
         public abstract TProvider CreateProvider();
 
@@ -302,8 +48,8 @@ namespace Samples
                         IList<Member> members = new List<Member>(ProviderTestTemplate<TProvider>.CountMembers);
                         for (int memberIndex = 0; memberIndex < ProviderTestTemplate<TProvider>.CountMembers; memberIndex++)
                         {
-                            Resource userResource = ProviderTestTemplate<TProvider>.ComposeUserResource();
-                            userResource = await provider.Create(userResource, correlationIdentifierCreate);
+                            Resource userResource = SampleComposer.Instance.ComposeUserResource();
+                            userResource = await provider.CreateAsync(userResource, correlationIdentifierCreate);
                             Assert.IsNotNull(userResource);
                             Assert.IsFalse(string.IsNullOrWhiteSpace(userResource.Identifier));
                             Member member =
@@ -314,9 +60,9 @@ namespace Samples
                             members.Add(member);
                         }
 
-                        WindowsAzureActiveDirectoryGroup group = ProviderTestTemplate<TProvider>.ComposeGroupResource();
+                        GroupBase group = SampleComposer.Instance.ComposeGroupResource();
                         group.Members = members.ToArray();
-                        Resource groupResource = await provider.Create(group, correlationIdentifierCreate);
+                        Resource groupResource = await provider.CreateAsync(group, correlationIdentifierCreate);
                         Assert.IsNotNull(groupResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(groupResource.Identifier));
 
@@ -351,8 +97,8 @@ namespace Samples
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
-                        Resource inputResource = ProviderTestTemplate<TProvider>.ComposeUserResource();
-                        Resource outputResource = await provider.Create(inputResource, correlationIdentifierCreate);
+                        Resource inputResource = SampleComposer.Instance.ComposeUserResource();
+                        Resource outputResource = await provider.CreateAsync(inputResource, correlationIdentifierCreate);
                         Assert.IsNotNull(outputResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(outputResource.Identifier));
                         IResourceIdentifier resourceIdentifier =
@@ -376,8 +122,8 @@ namespace Samples
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
-                        Resource inputResource = ProviderTestTemplate<TProvider>.ComposeUserResource();
-                        Resource outputResource = await provider.Create(inputResource, correlationIdentifierCreate);
+                        Resource inputResource = SampleComposer.Instance.ComposeUserResource();
+                        Resource outputResource = await provider.CreateAsync(inputResource, correlationIdentifierCreate);
                         Assert.IsNotNull(outputResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(outputResource.Identifier));
                         IResourceIdentifier resourceIdentifier =
@@ -387,7 +133,7 @@ namespace Samples
                                         Identifier = outputResource.Identifier
                                     };
                         string correlationIdentifierDelete = Guid.NewGuid().ToString();
-                        await provider.Delete(resourceIdentifier, correlationIdentifierDelete);
+                        await provider.DeleteAsync(resourceIdentifier, correlationIdentifierDelete);
                     });
             await this.RunTest(testFunction);
         }
@@ -403,8 +149,8 @@ namespace Samples
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
-                        Core2EnterpriseUser inputResource = ProviderTestTemplate<TProvider>.ComposeUserResource() as Core2EnterpriseUser;
-                        Resource outputResource = await provider.Create(inputResource, correlationIdentifierCreate);
+                        Core2EnterpriseUser inputResource = SampleComposer.Instance.ComposeUserResource() as Core2EnterpriseUser;
+                        Resource outputResource = await provider.CreateAsync(inputResource, correlationIdentifierCreate);
                         Assert.IsNotNull(outputResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(outputResource.Identifier));
 
@@ -421,13 +167,14 @@ namespace Samples
                         IQueryParameters queryParameters =
                             new QueryParameters(
                                     SchemaIdentifiers.Core2EnterpriseUser,
+                                    ProtocolConstants.PathUsers,
                                     filters,
                                     requestedAttributes,
                                     excludedAttributes);
 
                         string correlationIdentifierQuery = Guid.NewGuid().ToString();
 
-                        IReadOnlyCollection<Resource> resources = await provider.Query(queryParameters, correlationIdentifierQuery);
+                        IReadOnlyCollection<Resource> resources = await provider.QueryAsync(queryParameters, correlationIdentifierQuery);
                         Assert.IsNotNull(resources);
                         Resource resource = resources.Single();
                         Assert.IsTrue(string.Equals(outputResource.Identifier, resource.Identifier, StringComparison.OrdinalIgnoreCase));
@@ -446,8 +193,8 @@ namespace Samples
                     {
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
-                        Resource inputResource = ProviderTestTemplate<TProvider>.ComposeUserResource();
-                        Resource outputResource = await provider.Create(inputResource, correlationIdentifierCreate);
+                        Resource inputResource = SampleComposer.Instance.ComposeUserResource();
+                        Resource outputResource = await provider.CreateAsync(inputResource, correlationIdentifierCreate);
                         Assert.IsNotNull(outputResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(outputResource.Identifier));
 
@@ -457,13 +204,14 @@ namespace Samples
                         IResourceRetrievalParameters resourceRetrievalParameters =
                             new ResourceRetrievalParameters(
                                 SchemaIdentifiers.Core2EnterpriseUser,
+                                ProtocolConstants.PathUsers,
                                 outputResource.Identifier,
                                 requestedAttributes,
                                 excludedAttributes);
 
                         string correlationIdentifierQuery = Guid.NewGuid().ToString();
 
-                        Resource resource = await provider.Retrieve(resourceRetrievalParameters, correlationIdentifierQuery);
+                        Resource resource = await provider.RetrieveAsync(resourceRetrievalParameters, correlationIdentifierQuery);
                         Assert.IsNotNull(resource);
                         Assert.IsTrue(string.Equals(outputResource.Identifier, resource.Identifier, StringComparison.OrdinalIgnoreCase));
                     });
@@ -479,12 +227,12 @@ namespace Samples
                 new Func<ProviderBase, Task>(
                     async (ProviderBase provider) =>
                     {
-                        PatchRequest2 patchRequest = ProviderTestTemplate<TProvider>.ComposeUserPatch();
+                        PatchRequest2 patchRequest = SampleComposer.Instance.ComposeUserPatch();
 
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
-                        Resource inputResource = ProviderTestTemplate<TProvider>.ComposeUserResource();
-                        Resource outputResource = await provider.Create(inputResource, correlationIdentifierCreate);
+                        Resource inputResource = SampleComposer.Instance.ComposeUserResource();
+                        Resource outputResource = await provider.CreateAsync(inputResource, correlationIdentifierCreate);
                         Assert.IsNotNull(outputResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(outputResource.Identifier));
 
@@ -503,7 +251,7 @@ namespace Samples
                             };
 
                         string correlationIdentifierUpdate = Guid.NewGuid().ToString();
-                        await provider.Update(patch, correlationIdentifierUpdate);
+                        await provider.UpdateAsync(patch, correlationIdentifierUpdate);
                     });
             await this.RunTest(testFunction);
         }
@@ -520,14 +268,14 @@ namespace Samples
                         string correlationIdentifier;
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        Resource reportResource = ProviderTestTemplate<TProvider>.ComposeUserResource();
-                        reportResource = await provider.Create(reportResource, correlationIdentifier);
+                        Resource reportResource = SampleComposer.Instance.ComposeUserResource();
+                        reportResource = await provider.CreateAsync(reportResource, correlationIdentifier);
                         Assert.IsNotNull(reportResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(reportResource.Identifier));
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        Resource managerResource = ProviderTestTemplate<TProvider>.ComposeUserResource();
-                        managerResource = await provider.Create(managerResource, correlationIdentifier);
+                        Resource managerResource = SampleComposer.Instance.ComposeUserResource();
+                        managerResource = await provider.CreateAsync(managerResource, correlationIdentifier);
                         Assert.IsNotNull(managerResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(managerResource.Identifier));
 
@@ -543,7 +291,7 @@ namespace Samples
                             };
 
                         patchRequest =
-                            ProviderTestTemplate<TProvider>.ComposeReferencePatch(
+                            SampleComposer.Instance.ComposeReferencePatch(
                                 AttributeNames.Manager,
                                 managerResource.Identifier,
                                 OperationName.Replace);
@@ -556,7 +304,7 @@ namespace Samples
                             };
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.Update(patch, correlationIdentifier);
+                        await provider.UpdateAsync(patch, correlationIdentifier);
 
                         string filter =
                             string.Format(
@@ -578,6 +326,7 @@ namespace Samples
                         IQueryParameters queryParameters =
                             new QueryParameters(
                                     SchemaIdentifiers.Core2EnterpriseUser,
+                                    ProtocolConstants.PathUsers,
                                     filters,
                                     requestedAttributes,
                                     excludedAttributes);
@@ -586,13 +335,13 @@ namespace Samples
 
                         IReadOnlyCollection<Resource> resources;
 
-                        resources = await provider.Query(queryParameters, correlationIdentifier);
+                        resources = await provider.QueryAsync(queryParameters, correlationIdentifier);
                         Assert.IsNotNull(resources);
                         Assert.AreEqual(1, resources.Count);
                         Assert.AreEqual(reportResource.Identifier, resources.Single().Identifier);
 
                         patchRequest =
-                            ProviderTestTemplate<TProvider>.ComposeReferencePatch(
+                            SampleComposer.Instance.ComposeReferencePatch(
                                 AttributeNames.Manager,
                                 managerResource.Identifier,
                                 OperationName.Remove);
@@ -605,14 +354,14 @@ namespace Samples
                             };
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.Update(patch, correlationIdentifier);
+                        await provider.UpdateAsync(patch, correlationIdentifier);
 
-                        resources = await provider.Query(queryParameters, correlationIdentifier);
+                        resources = await provider.QueryAsync(queryParameters, correlationIdentifier);
                         Assert.IsNotNull(resources);
                         Assert.AreEqual(0, resources.Count);
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.Delete(resourceIdentifier, correlationIdentifier);
+                        await provider.DeleteAsync(resourceIdentifier, correlationIdentifier);
 
                         resourceIdentifier =
                             new ResourceIdentifier()
@@ -622,7 +371,7 @@ namespace Samples
                             };
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.Delete(resourceIdentifier, correlationIdentifier);
+                        await provider.DeleteAsync(resourceIdentifier, correlationIdentifier);
                     });
             await this.RunTest(testFunction);
         }
@@ -639,14 +388,14 @@ namespace Samples
                         string correlationIdentifier;
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        Resource groupResource = ProviderTestTemplate<TProvider>.ComposeGroupResource();
-                        groupResource = await provider.Create(groupResource, correlationIdentifier);
+                        Resource groupResource = SampleComposer.Instance.ComposeGroupResource();
+                        groupResource = await provider.CreateAsync(groupResource, correlationIdentifier);
                         Assert.IsNotNull(groupResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(groupResource.Identifier));
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        Resource memberResource = ProviderTestTemplate<TProvider>.ComposeUserResource();
-                        memberResource = await provider.Create(memberResource, correlationIdentifier);
+                        Resource memberResource = SampleComposer.Instance.ComposeUserResource();
+                        memberResource = await provider.CreateAsync(memberResource, correlationIdentifier);
                         Assert.IsNotNull(memberResource);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(memberResource.Identifier));
 
@@ -661,7 +410,7 @@ namespace Samples
                                 Identifier = groupResource.Identifier
                             };
 
-                        patchRequest = ProviderTestTemplate<TProvider>.ComposeReferencePatch(
+                        patchRequest = SampleComposer.Instance.ComposeReferencePatch(
                             AttributeNames.Members,
                             memberResource.Identifier,
                             OperationName.Add);
@@ -674,7 +423,7 @@ namespace Samples
                             };
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.Update(patch, correlationIdentifier);
+                        await provider.UpdateAsync(patch, correlationIdentifier);
 
                         string filter =
                             string.Format(
@@ -696,6 +445,7 @@ namespace Samples
                         IQueryParameters queryParameters =
                             new QueryParameters(
                                     SchemaIdentifiers.WindowsAzureActiveDirectoryGroup,
+                                    ProtocolConstants.PathGroups,
                                     filters,
                                     requestedAttributes,
                                     excludedAttributes);
@@ -704,13 +454,13 @@ namespace Samples
 
                         IReadOnlyCollection<Resource> resources;
 
-                        resources = await provider.Query(queryParameters, correlationIdentifier);
+                        resources = await provider.QueryAsync(queryParameters, correlationIdentifier);
                         Assert.IsNotNull(resources);
                         Assert.AreEqual(1, resources.Count);
                         Assert.AreEqual(groupResource.Identifier, resources.Single().Identifier);
 
                         patchRequest =
-                            ProviderTestTemplate<TProvider>.ComposeReferencePatch(
+                            SampleComposer.Instance.ComposeReferencePatch(
                                 AttributeNames.Members,
                                 memberResource.Identifier,
                                 OperationName.Remove);
@@ -723,14 +473,14 @@ namespace Samples
                             };
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.Update(patch, correlationIdentifier);
+                        await provider.UpdateAsync(patch, correlationIdentifier);
 
-                        resources = await provider.Query(queryParameters, correlationIdentifier);
+                        resources = await provider.QueryAsync(queryParameters, correlationIdentifier);
                         Assert.IsNotNull(resources);
                         Assert.AreEqual(0, resources.Count);
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.Delete(resourceIdentifier, correlationIdentifier);
+                        await provider.DeleteAsync(resourceIdentifier, correlationIdentifier);
 
                         resourceIdentifier =
                             new ResourceIdentifier()
@@ -740,7 +490,7 @@ namespace Samples
                             };
 
                         correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.Delete(resourceIdentifier, correlationIdentifier);
+                        await provider.DeleteAsync(resourceIdentifier, correlationIdentifier);
                     });
             await this.RunTest(testFunction);
         }

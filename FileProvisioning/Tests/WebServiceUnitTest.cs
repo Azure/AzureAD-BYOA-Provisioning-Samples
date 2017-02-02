@@ -57,6 +57,7 @@ namespace Samples
                 () =>
                     new JavaScriptSerializer());
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "None")]
         [TestMethod]
         [TestCategory(TestCategory.Sample)]
         [TestCategory(TestCategory.WebService)]
@@ -78,27 +79,27 @@ namespace Samples
         [DeploymentItem(WebServiceUnitTest.FileNameSystemWebOwin)]
         public void TestCreateUser()
         {
-            Uri addressBase = new Uri(WebServiceUnitTest.AddressBase);
+            Uri resourceBase = new Uri(WebServiceUnitTest.AddressBase);
+            Uri resourceUsers = new Uri(WebServiceUnitTest.AddressRelativeUsers, UriKind.Relative);
 
             IMonitor monitor = new ConsoleMonitor();
-
             string fileName = CommaDelimitedFileUnitTest.ComposeFileName();
 
             FileProviderBase provider = null;
             try
             {
-                provider = new FileProvider(fileName);
+                provider = new AccessConnectivityEngineFileProviderFactory(fileName, monitor).CreateProvider();
                 Service webService = null;
                 try
                 {
                     webService = new WebService(monitor, provider);
-                    webService.Start(addressBase);
+                    webService.Start(resourceBase);
 
-                    IDictionary<string, object> json = ProviderTestTemplate<FileProvider>.ComposeUserResource().ToJson();
+                    IDictionary<string, object> json = SampleComposer.Instance.ComposeUserResource().ToJson();
                     string characters = WebServiceUnitTest.Serializer.Value.Serialize(json);
                     byte[] bytes = Encoding.UTF8.GetBytes(characters);
 
-                    Uri resource = new Uri(addressBase, WebServiceUnitTest.AddressRelativeUsers);
+                    Uri resource = new Uri(resourceBase, resourceUsers);
 
                     WebClient client = null;
                     try
@@ -124,8 +125,10 @@ namespace Samples
                         Assert.IsNotNull(user.Metadata);
                         Assert.IsFalse(string.IsNullOrWhiteSpace(user.Metadata.ResourceType));
 
-                        string resourcePath = string.Concat(WebServiceUnitTest.AddressRelativeUser, user.Identifier);
-                        resource = new Uri(addressBase, resourcePath);
+                        string resourcePathValue = 
+                            string.Concat(WebServiceUnitTest.AddressRelativeUser, user.Identifier);
+                        Uri resourcePath = new Uri(resourcePathValue, UriKind.Relative);
+                        resource = new Uri(resourceBase, resourcePath);
                         bytes = new byte[0];
                         client.UploadData(resource, WebServiceUnitTest.MethodDelete, bytes);
                     }
@@ -179,7 +182,7 @@ namespace Samples
         [DeploymentItem(WebServiceUnitTest.FileNameSystemWebOwin)]
         public void TestRetrieveGroup()
         {
-            Uri addressBase = new Uri(WebServiceUnitTest.AddressBase);
+            Uri resourceBase = new Uri(WebServiceUnitTest.AddressBase);
 
             IMonitor monitor = new ConsoleMonitor();
 
@@ -188,20 +191,21 @@ namespace Samples
             FileProviderBase provider = null;
             try
             {
-                provider = new FileProvider(fileName);
+                provider = new AccessConnectivityEngineFileProviderFactory(fileName, monitor).CreateProvider();
                 Service webService = null;
                 try
                 {
                     webService = new WebService(monitor, provider);
-                    webService.Start(addressBase);
+                    webService.Start(resourceBase);
 
                     Guid groupIdentifier = Guid.NewGuid();
-                    string resourceRelative =
+                    string resourceRelativeValue =
                         string.Format(
                             CultureInfo.InvariantCulture,
                             WebServiceUnitTest.AddressRelativeGroupTemplate,
                             groupIdentifier);
-                    Uri resource = new Uri(addressBase, resourceRelative);
+                    Uri resourceRelative = new Uri(resourceRelativeValue, UriKind.Relative);
+                    Uri resource = new Uri(resourceBase, resourceRelative);
 
                     HttpWebResponse response = null;
 

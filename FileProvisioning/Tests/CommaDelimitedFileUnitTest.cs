@@ -15,7 +15,7 @@ namespace Samples
     [TestClass]
     public class CommaDelimitedFileUnitTest
     {
-        private const string CommaDelimitedFileNameTemplate = "{0}.csv";
+        private const string FileNameExtensionCommaSeparatedValues = "csv";
 
         private const int CountColumns = 5;
         private const int CountInsertIterations = 2;
@@ -23,12 +23,11 @@ namespace Samples
 
         public static string ComposeFileName()
         {
-            string fileNamePrefix = Guid.NewGuid().ToString();
-            string result =
-                string.Format(
-                    CultureInfo.InvariantCulture,
-                    CommaDelimitedFileUnitTest.CommaDelimitedFileNameTemplate,
-                    fileNamePrefix);
+            string path = Guid.NewGuid().ToString();
+            string result = 
+                Path.ChangeExtension(
+                    path, 
+                    CommaDelimitedFileUnitTest.FileNameExtensionCommaSeparatedValues);
             return result;
         }
  
@@ -50,12 +49,19 @@ namespace Samples
 
                 IList<string> keys = new List<string>(CommaDelimitedFileUnitTest.CountRows);
 
-                for (int indexIterations = 0; indexIterations < CommaDelimitedFileUnitTest.CountInsertIterations; indexIterations++)
+                for 
+                (
+                    int indexIterations = 0; 
+                    indexIterations < CommaDelimitedFileUnitTest.CountInsertIterations; 
+                    indexIterations++
+                )
                 {
                     ITabularFileAdapter fileStore = null;
                     try
                     {
-                        fileStore = new CommaDelimitedFileAdapter(fileName, columnNames);
+                        fileStore = 
+                            new AccessConnectivityEngineCommaDelimitedFileAdapterFactory(fileName)
+                            .CreateFileAdapter(columnNames);
                         Assert.IsTrue(File.Exists(fileName));
 
                         for (int indexRows = 0; indexRows < CommaDelimitedFileUnitTest.CountRows; indexRows++)
@@ -115,7 +121,9 @@ namespace Samples
                 ITabularFileAdapter fileStore = null;
                 try
                 {
-                    fileStore = new CommaDelimitedFileAdapter(fileName, columnNames);
+                    fileStore = 
+                        new AccessConnectivityEngineCommaDelimitedFileAdapterFactory(fileName)
+                        .CreateFileAdapter(columnNames);
                     Assert.IsTrue(File.Exists(fileName));
 
                     Dictionary<string, string> columnsWritten =
@@ -190,7 +198,9 @@ namespace Samples
                 ITabularFileAdapter fileStore = null;
                 try
                 {
-                    fileStore = new CommaDelimitedFileAdapter(fileName, columnNames);
+                    fileStore = 
+                        new AccessConnectivityEngineCommaDelimitedFileAdapterFactory(fileName)
+                        .CreateFileAdapter(columnNames);
                     Assert.IsTrue(File.Exists(fileName));
 
                     Dictionary<string, string> columnsWritten =
@@ -256,7 +266,9 @@ namespace Samples
                 ITabularFileAdapter fileStore = null;
                 try
                 {
-                    fileStore = new CommaDelimitedFileAdapter(fileName, columnNames);
+                    fileStore = 
+                        new AccessConnectivityEngineCommaDelimitedFileAdapterFactory(fileName)
+                        .CreateFileAdapter(columnNames);
                     Assert.IsTrue(File.Exists(fileName));
 
                     Dictionary<string, string> columnsWritten =
@@ -326,7 +338,9 @@ namespace Samples
                 string replacementValue;
                 try
                 {
-                    fileStore = new CommaDelimitedFileAdapter(fileName, columnNames);
+                    fileStore = 
+                        new AccessConnectivityEngineCommaDelimitedFileAdapterFactory(fileName)
+                        .CreateFileAdapter(columnNames);
                     Assert.IsTrue(File.Exists(fileName));
 
                     Dictionary<string, string> columnsWritten =

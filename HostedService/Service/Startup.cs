@@ -26,51 +26,19 @@ namespace Microsoft.SystemForCrossDomainIdentityManagement
 
         private class DefaultMonitor : IMonitor
         {
-            public void Inform(string information, bool verbose, string correlationIdentifier)
+            public void Inform(IInformationNotification notification)
             {
             }
 
-            public void Inform(string information, bool verbose)
+            public void Report(IExceptionNotification notification)
             {
             }
 
-            public void Inform(string information, string correlationIdentifier)
+            public void Warn(Notification<string> notification)
             {
             }
 
-            public void Inform(string information)
-            {
-            }
-
-            public void Report(Exception exception, bool critical, string correlationIdentifier)
-            {
-            }
-
-            public void Report(Exception exception, bool critical)
-            {
-            }
-
-            public void Report(Exception exception, string correlationIdentifier)
-            {
-            }
-
-            public void Report(Exception exception)
-            {
-            }
-
-            public void Warn(Exception exception, string correlationIdentifier)
-            {
-            }
-
-            public void Warn(Exception exception)
-            {
-            }
-
-            public void Warn(string warning, string correlationIdentifier)
-            {
-            }
-
-            public void Warn(string warning)
+            public void Warn(Notification<Exception> notification)
             {
             }
         }

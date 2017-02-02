@@ -15,12 +15,12 @@ namespace Samples
     {
         public override FileProviderBase CreateProvider()
         {
-            string fileName = CommaDelimitedFileUnitTest.ComposeFileName();
-
             FileProviderBase result = null;
             try
             {
-                result = new FileProvider(fileName);
+                string fileName = CommaDelimitedFileUnitTest.ComposeFileName();
+                IMonitor monitor = new ConsoleMonitor();
+                result = new AccessConnectivityEngineFileProviderFactory(fileName, monitor).CreateProvider();
                 return result;
             }
             catch
