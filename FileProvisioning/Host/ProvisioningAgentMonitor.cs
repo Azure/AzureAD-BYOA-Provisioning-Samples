@@ -9,8 +9,6 @@ namespace Samples
 
     internal class ProvisioningAgentMonitor : IMonitor
     {
-        private static IMonitor instance;
-
         private IMonitor consoleMonitor;
         
         public ProvisioningAgentMonitor(string terminationPrompt)

@@ -5,13 +5,15 @@
 namespace Samples
 {
     using System;
+    using System.Collections.Generic;
     using Microsoft.SystemForCrossDomainIdentityManagement;
 
     public abstract class FileProviderFactory
     {
         protected FileProviderFactory(
             TabularFileAdapterFactory fileAdapterFactory,
-            IMonitor monitoringBehavior)
+            IMonitor monitoringBehavior, 
+            IReadOnlyCollection<string> attributeNames)
         {
             if (null == fileAdapterFactory)
             {
@@ -23,8 +25,27 @@ namespace Samples
                 throw new ArgumentNullException(nameof(monitoringBehavior));
             }
 
+            if (null == attributeNames)
+            {
+                throw new ArgumentNullException(nameof(attributeNames));
+            }
+
             this.FileAdapterFactory = fileAdapterFactory;
             this.MonitoringBehavior = monitoringBehavior;
+            this.AttributeNames = attributeNames;
+        }
+
+        protected FileProviderFactory(
+            TabularFileAdapterFactory fileAdapterFactory,
+            IMonitor monitoringBehavior)
+            :this(fileAdapterFactory, monitoringBehavior, new string[0])
+        {
+        }
+
+        private IReadOnlyCollection<string> AttributeNames
+        {
+            get;
+            set;
         }
 
         private TabularFileAdapterFactory FileAdapterFactory
@@ -41,7 +62,10 @@ namespace Samples
 
         public virtual FileProviderBase CreateProvider()
         {
-            FileProviderBase result = new FileProvider(this.FileAdapterFactory, this.MonitoringBehavior);
+            FileProviderBase result = new FileProvider(
+                this.FileAdapterFactory, 
+                this.MonitoringBehavior, 
+                this.AttributeNames);
             return result;
         }
     }

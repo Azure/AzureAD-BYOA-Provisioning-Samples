@@ -25,7 +25,8 @@ namespace Samples
         private const string ConnectionStringTemplate = 
             @"Provider={0};Data Source={1};Extended Properties=""text;HDR=YES;FMT=Delimited""";
 
-        private const string FilterTemplate =  "[{0}] = \"{1}\"";
+        private const string FilterTemplate =  "[{0}] = {1}";
+        private const string StringCriterionTemplate = "\"{0}\"";
 
         private const string QueryTemplate = "SELECT * FROM [{0}]";
         private const string QueryByKeyTemplate = 
@@ -111,6 +112,38 @@ Format=CSVDelimited";
         {
             get;
             private set;
+        }
+
+        private static string ComposeCriterion(string criterion)
+        {
+            if (string.IsNullOrWhiteSpace(criterion))
+            {
+                throw new ArgumentNullException(nameof(criterion));
+            }
+
+            bool boolean;
+            if (bool.TryParse(criterion, out boolean))
+            {
+                return criterion;
+            }
+
+            if
+            (
+                criterion
+                .All(
+                    (char item) => 
+                        Char.IsDigit(item))
+            )
+            {
+                return criterion;
+            }
+
+            string result = 
+                string.Format(
+                    CultureInfo.InvariantCulture, 
+                    CommaDelimitedFileAdapter.StringCriterionTemplate, 
+                    criterion);
+            return result;
         }
 
         private IReadOnlyCollection<string> ComposeHeaders(IReadOnlyCollection<string> columnNames)
@@ -326,8 +359,16 @@ Format=CSVDelimited";
                     this.fileName);
             if (columns.Any())
             {
+                IList<KeyValuePair<string, string>> criteria = new List<KeyValuePair<string, string>>(columns.Count);
+                foreach (KeyValuePair<string, string> column in columns)
+                {
+                    string criterionValue = CommaDelimitedFileAdapter.ComposeCriterion(column.Value);
+                    KeyValuePair<string, string> criterion =
+                        new KeyValuePair<string, string>(column.Key, criterionValue);
+                    criteria.Add(criterion);
+                }
                 IReadOnlyCollection<string> filters =
-                    columns
+                    criteria
                     .Select(
                         (KeyValuePair<string, string> item) =>
                             string.Format(
@@ -359,15 +400,21 @@ Format=CSVDelimited";
                             new Dictionary<string, string>(this.headers.Count - 1);
                         for (int indexColumn = 1; indexColumn < this.headers.Count; indexColumn++)
                         {
-                            string columnValue = reader[indexColumn] as string;
-                            if (string.IsNullOrWhiteSpace(columnValue))
+                            object columnValue = reader[indexColumn];
+                            if (null == columnValue)
+                            {
+                                continue;
+                            }
+
+                            string value = columnValue.ToString();
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 continue;
                             }
 
                             string columnHeader = this.headers.ElementAt(indexColumn);
 
-                            rowColumns.Add(columnHeader, columnValue);
+                            rowColumns.Add(columnHeader, value);
                         }
 
                         IRow row = new Row(rowKey, rowColumns);

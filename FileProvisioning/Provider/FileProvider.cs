@@ -11,6 +11,7 @@ namespace Samples
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Web.Http;
+    using Microsoft.Graph.Provisioning;
     using Microsoft.SystemForCrossDomainIdentityManagement;
     using Owin;
     using Samples.Properties;
@@ -25,6 +26,14 @@ namespace Samples
         private const long NotificationIdentifierRetrievalStarting = 1005;
         private const long NotificationIdentifierUpdateStarting = 1005;
 
+        private static readonly Lazy<IReadOnlyCollection<IExtension>> ExtensionsSingleton =
+            new Lazy<IReadOnlyCollection<IExtension>>(
+                () =>
+                    new IExtension[]
+                    {
+                        DynamicUsersExtension.Instance
+                    });
+
         private static readonly Lazy<IReadOnlyCollection<string>> SchemaIdentifiersGroup =
             new Lazy<IReadOnlyCollection<string>>(
                 () =>
@@ -34,12 +43,14 @@ namespace Samples
                         SchemaIdentifiers.WindowsAzureActiveDirectoryGroup
                     });
 
-        private readonly IReadOnlyCollection<string> attributeNames;
         private readonly object thisLock = new object();
 
         private ITabularFileAdapter file;
 
-        public FileProvider(TabularFileAdapterFactory fileAdapterFactory, IMonitor monitor)
+        public FileProvider(
+            TabularFileAdapterFactory fileAdapterFactory,
+            IMonitor monitor, 
+            IReadOnlyCollection<string> attributeNames)
         {
             if (null == fileAdapterFactory)
             {
@@ -54,14 +65,40 @@ namespace Samples
             this.Monitor = monitor;
 
             Type typeAttributeNames = typeof(AttributeNames);
-            this.attributeNames =
+            IReadOnlyCollection<string> buffer =
                 typeAttributeNames.GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Select(
                     (FieldInfo item) =>
                         (string)item.GetValue(null))
                 .ToArray();
+            this.ColumnNames =
+                buffer
+                .Union(attributeNames)
+                .Distinct()
+                .ToArray();
 
-            this.file = fileAdapterFactory.CreateFileAdapter(attributeNames);
+            this.file = fileAdapterFactory.CreateFileAdapter(this.ColumnNames);
+        }
+
+        public FileProvider(
+            TabularFileAdapterFactory fileAdapterFactory, 
+            IMonitor monitor)
+            :this(fileAdapterFactory, monitor, new string[0])
+        {
+        }
+
+        private IReadOnlyCollection<string> ColumnNames
+        {
+            get;
+            set;
+        }
+
+        public override IReadOnlyCollection<IExtension> Extensions
+        {
+            get
+            {
+                return FileProvider.ExtensionsSingleton.Value;
+            }
         }
 
         public override string FilePath
@@ -84,6 +121,53 @@ namespace Samples
             {
                 return this.OnServiceStartup;
             }
+        }
+
+        private async Task AddMembersOf(Resource resource)
+        {
+            WindowsAzureActiveDirectory2Group group = resource as WindowsAzureActiveDirectory2Group;
+            if (group != null && group.Members != null && group.Members.Any())
+            {
+                foreach (Member member in group.Members)
+                {
+                    MemberColumnsFactory memberColumnsFactory = new MemberColumnsFactory(resource, member);
+                    IReadOnlyDictionary<string, string> memberColumns = memberColumnsFactory.CreateColumns();
+                    await this.file.InsertRow(memberColumns);
+                }
+            }
+        }
+
+        private static IReadOnlyDictionary<string, string> Apply(PatchRequest2 patch, string schemaIdentifier, IRow row)
+        {
+            if (null == patch)
+            {
+                throw new ArgumentNullException(nameof(patch));
+            }
+
+            if (string.IsNullOrWhiteSpace(schemaIdentifier))
+            {
+                throw new ArgumentNullException(nameof(schemaIdentifier));
+            }
+
+            IReadOnlyDictionary<string, string> result;
+            switch (schemaIdentifier)
+            {
+                case SchemaIdentifiers.Core2EnterpriseUser:
+                    result = FileProvider.PatchUser(patch, row);
+                    return result;
+
+                case DynamicConstants.SchemaIdentifierUser:
+                    result = FileProvider.PatchDynamicUser(patch, row);
+                    return result;
+
+                case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
+                    result = FileProvider.PatchGroup(patch, row);
+                    return result;
+
+                default:
+                    throw new NotSupportedException(schemaIdentifier);
+            }
+            
         }
 
         public override async Task<Resource> CreateAsync(Resource resource, string correlationIdentifier)
@@ -111,54 +195,14 @@ namespace Samples
                     resource.ExternalIdentifier);
             this.Monitor.Inform(notification);
 
-            ColumnsFactory columnsFactory;
-
-            WindowsAzureActiveDirectoryGroup group = resource as WindowsAzureActiveDirectoryGroup;
-            if (group != null)
-            {
-                columnsFactory = new GroupColumnsFactory(group);
-            }
-            else
-            {
-                Core2EnterpriseUser user = resource as Core2EnterpriseUser;
-                if (user != null)
-                {
-                    columnsFactory = new UserColumnsFactory(user);
-                }
-                else
-                {
-                    string unsupportedSchema =
-                        string.Join(
-                            Environment.NewLine,
-                            resource.Schemas);
-                    throw new NotSupportedException(unsupportedSchema);
-                }
-            }
-
+            ColumnsFactory columnsFactory = FileProvider.SelectColumnsFactoryFor(resource);
             IReadOnlyDictionary<string, string> columns = columnsFactory.CreateColumns();
             IRow row = await this.file.InsertRow(columns);
 
-            ResourceFactory resourceFactory;
-            if (group != null)
-            {
-                resourceFactory = new GroupFactory(row);
-            }
-            else
-            {
-                resourceFactory = new UserFactory(row);
-            }
-
+            ResourceFactory resourceFactory = FileProvider.SelectResourceFactoryFor(resource, row);
             Resource result = resourceFactory.CreateResource();
 
-            if (group != null && group.Members != null && group.Members.Any())
-            {
-                foreach (Member member in group.Members)
-                {
-                    MemberColumnsFactory memberColumnsFactory = new MemberColumnsFactory(result, member);
-                    IReadOnlyDictionary<string, string> memberColumns = memberColumnsFactory.CreateColumns();
-                    await this.file.InsertRow(memberColumns);
-                }
-            }
+            await this.AddMembersOf(result);
 
             return result;
         }
@@ -268,7 +312,7 @@ namespace Samples
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            IEnumerable<string> requestedAttributes = this.attributeNames;
+            IEnumerable<string> requestedAttributes = this.ColumnNames;
             if (parameters.RequestedAttributePaths != null && parameters.RequestedAttributePaths.Any())
             {
                 requestedAttributes =
@@ -320,6 +364,65 @@ namespace Samples
 
         private void OnServiceStartup(IAppBuilder applicationBuilder, HttpConfiguration configuration)
         {
+        }
+
+        private static IReadOnlyDictionary<string, string> PatchDynamicUser(PatchRequest2 patch, IRow row)
+        {
+            DynamicUser dynamicUser = new DynamicUserFactory(row).Create();
+            Dictionary<string, string> result =
+                new DynamicUserColumnsFactory(dynamicUser)
+                .CreateColumns()
+                .ToDictionary(
+                    (KeyValuePair<string, string> item) =>
+                        item.Key,
+                    (KeyValuePair<string, string> item) =>
+                        item.Value);
+            if (null == patch.Operations || !patch.Operations.Any())
+            {
+                return result;
+            }
+
+            foreach (PatchOperation operation in patch.Operations)
+            {
+                if (string.IsNullOrWhiteSpace(operation?.Path?.AttributePath))
+                {
+                    continue;
+                }
+
+                string updatedValue = operation.Value.First().Value;
+
+                string originalValue;
+                if (!result.TryGetValue(operation.Path.AttributePath, out originalValue))
+                {
+                    result.Add(operation.Path.AttributePath, updatedValue);
+                }
+                else
+                {
+                    result[operation.Path.AttributePath] = updatedValue;
+                }
+            }
+
+            return result;
+        }
+
+        private static IReadOnlyDictionary<string, string> PatchGroup(PatchRequest2 patch, IRow row)
+        {
+            ResourceFactory<WindowsAzureActiveDirectoryGroup> groupFactory = new GroupFactory(row);
+            WindowsAzureActiveDirectoryGroup group = groupFactory.Create();
+            group.Apply(patch);
+            ColumnsFactory<WindowsAzureActiveDirectoryGroup> groupColumnsFactory = new GroupColumnsFactory(group);
+            IReadOnlyDictionary<string, string> result = groupColumnsFactory.CreateColumns();
+            return result;
+        }
+
+        private static IReadOnlyDictionary<string, string> PatchUser(PatchRequest2 patch, IRow row)
+        {
+            ResourceFactory<Core2EnterpriseUser> userFactory = new UserFactory(row);
+            Core2EnterpriseUser user = userFactory.Create();
+            user.Apply(patch);
+            ColumnsFactory<Core2EnterpriseUser> userColumnsFactory = new UserColumnsFactory(user);
+            IReadOnlyDictionary<string, string> result = userColumnsFactory.CreateColumns();
+            return result;
         }
 
         public override async Task<Resource[]> QueryAsync(IQueryParameters parameters, string correlationIdentifier)
@@ -414,20 +517,7 @@ namespace Samples
                 }
 
                 IRow reducedRow = FileProvider.FilterColumns(row, requestedColumns);
-
-                ResourceFactory resourceFactory;
-                switch (rowSchema)
-                {
-                    case SchemaIdentifiers.Core2EnterpriseUser:
-                        resourceFactory = new UserFactory(reducedRow);
-                        break;
-                    case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
-                        resourceFactory = new GroupFactory(reducedRow);
-                        break;
-                    default:
-                        throw new NotSupportedException(parameters.SchemaIdentifier);
-                }
-
+                ResourceFactory resourceFactory = FileProvider.SelectResourceFactoryFor(rowSchema, reducedRow);
                 Resource resource = resourceFactory.CreateResource();
                 resources.Add(resource);
             }
@@ -469,7 +559,7 @@ namespace Samples
             (
                 !string.Equals(
                     selectedAttribute,
-                    Microsoft.SystemForCrossDomainIdentityManagement.AttributeNames.Identifier,
+                    AttributeNames.Identifier,
                     StringComparison.OrdinalIgnoreCase)
             )
             {
@@ -617,20 +707,7 @@ namespace Samples
             }
 
             IRow reducedRow = FileProvider.FilterColumns(row, requestedColumns);
-
-            ResourceFactory resourceFactory;
-            switch (rowSchema)
-            {
-                case SchemaIdentifiers.Core2EnterpriseUser:
-                    resourceFactory = new UserFactory(reducedRow);
-                    break;
-                case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
-                    resourceFactory = new GroupFactory(reducedRow);
-                    break;
-                default:
-                    throw new NotSupportedException(parameters.SchemaIdentifier);
-            }
-
+            ResourceFactory resourceFactory = FileProvider.SelectResourceFactoryFor(rowSchema, reducedRow);
             Resource resource = resourceFactory.CreateResource();
             Resource[] results =
                 new Resource[]
@@ -697,22 +774,94 @@ namespace Samples
             }
 
             IRow reducedRow = FileProvider.FilterColumns(row, columnNames);
-
-            ResourceFactory resourceFactory;
-            switch (rowSchema)
-            {
-                case SchemaIdentifiers.Core2EnterpriseUser:
-                    resourceFactory = new UserFactory(reducedRow);
-                    break;
-                case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
-                    resourceFactory = new GroupFactory(reducedRow);
-                    break;
-                default:
-                    throw new NotSupportedException(parameters.SchemaIdentifier);
-            }
-
+            ResourceFactory resourceFactory = FileProvider.SelectResourceFactoryFor(rowSchema, reducedRow);
             Resource result = resourceFactory.CreateResource();
             return result;
+        }
+
+        private static ColumnsFactory SelectColumnsFactoryFor(Resource resource)
+        {
+            WindowsAzureActiveDirectoryGroup group = resource as WindowsAzureActiveDirectoryGroup;
+            if (group != null)
+            {
+                ColumnsFactory result = new GroupColumnsFactory(group);
+                return result;
+            }
+            
+            Core2EnterpriseUser user = resource as Core2EnterpriseUser;
+            if (user != null)
+            {
+                ColumnsFactory result = new UserColumnsFactory(user);
+                return result;
+            }
+
+            DynamicUser dynamicUser = resource as DynamicUser;
+            if (dynamicUser != null)
+            {
+                ColumnsFactory result = new DynamicUserColumnsFactory(dynamicUser);
+                return result;
+            }
+
+            string unsupportedSchema =
+                        string.Join(
+                            Environment.NewLine,
+                            resource.Schemas);
+            throw new NotSupportedException(unsupportedSchema);
+        }
+
+        private static ResourceFactory SelectResourceFactoryFor(Resource resource, IRow row)
+        {
+            WindowsAzureActiveDirectoryGroup group = resource as WindowsAzureActiveDirectoryGroup;
+            if (group != null)
+            {
+                ResourceFactory result = new GroupFactory(row);
+                return result;
+            }
+
+            Core2EnterpriseUser user = resource as Core2EnterpriseUser;
+            if (user != null)
+            {
+                ResourceFactory result = new UserFactory(row);
+                return result;
+            }
+
+            DynamicUser dynamicUser = resource as DynamicUser;
+            if (dynamicUser != null)
+            {
+                ResourceFactory result = new DynamicUserFactory(row);
+                return result;
+            }
+
+            string unsupportedSchema =
+                        string.Join(
+                            Environment.NewLine,
+                            resource.Schemas);
+            throw new NotSupportedException(unsupportedSchema);
+        }
+
+        private static ResourceFactory SelectResourceFactoryFor(string schemaIdentifier, IRow row)
+        {
+            if (string.IsNullOrWhiteSpace(schemaIdentifier))
+            {
+                throw new ArgumentNullException(nameof(schemaIdentifier));
+            }
+
+            ResourceFactory resourceFactory;
+            switch (schemaIdentifier)
+            {
+                case SchemaIdentifiers.Core2EnterpriseUser:
+                    resourceFactory = new UserFactory(row);
+                    break;
+                case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
+                    resourceFactory = new GroupFactory(row);
+                    break;
+                case DynamicConstants.SchemaIdentifierUser:
+                    resourceFactory = new DynamicUserFactory(row);
+                    break;
+                default:
+                    throw new NotSupportedException(schemaIdentifier);
+            }
+            return resourceFactory;
         }
 
         public override async Task UpdateAsync(IPatch patch, string correlationIdentifier)
@@ -765,34 +914,13 @@ namespace Samples
                 return;
             }
 
-            IReadOnlyDictionary<string, string> columns;
-            WindowsAzureActiveDirectoryGroup group = null;
-            switch (rowSchema)
-            {
-                case SchemaIdentifiers.Core2EnterpriseUser:
-                    ResourceFactory<Core2EnterpriseUser> userFactory = new UserFactory(row);
-                    Core2EnterpriseUser user = userFactory.Create();
-                    user.Apply(patchRequest);
-                    ColumnsFactory<Core2EnterpriseUser> userColumnsFactory = new UserColumnsFactory(user);
-                    columns = userColumnsFactory.CreateColumns();
-                    break;
-
-                case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
-                    ResourceFactory<WindowsAzureActiveDirectoryGroup> groupFactory = new GroupFactory(row);
-                    group = groupFactory.Create();
-                    group.Apply(patchRequest);
-                    ColumnsFactory<WindowsAzureActiveDirectoryGroup> groupColumnsFactory = new GroupColumnsFactory(group);
-                    columns = groupColumnsFactory.CreateColumns();
-                    break;
-                default:
-                    throw new NotSupportedException(patch.ResourceIdentifier.SchemaIdentifier);
-            }
-
+            IReadOnlyDictionary<string, string> columns = FileProvider.Apply(patchRequest, rowSchema, row);
             IRow rowReplacement = new Row(row.Key, columns);
             await this.file.ReplaceRow(rowReplacement);
 
-            if (group != null)
+            if (string.Equals(SchemaIdentifiers.WindowsAzureActiveDirectoryGroup, rowSchema, StringComparison.OrdinalIgnoreCase))
             {
+                WindowsAzureActiveDirectoryGroup group = new GroupFactory(row).Create();
                 await this.UpdateMembersAsync(group, patch);
             }
         }
@@ -877,7 +1005,7 @@ namespace Samples
                     }
 
                     Dictionary<string, string> columnsQuery = 
-                        new Dictionary<string,string>()
+                        new Dictionary<string, string>()
                             {
                                 {
                                     AttributeNames.Schemas,

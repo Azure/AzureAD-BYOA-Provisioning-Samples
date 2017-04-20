@@ -6,6 +6,7 @@ namespace Samples
 {
     using System;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Security;
     using System.Threading;
     using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Samples
 
     internal class Program
     {
-        private const int NumberArguments = 3;
+        private const int NumberArguments = 5;
 
         private static bool IsOperationCancelledException(Exception exception)
         {
@@ -41,6 +42,7 @@ namespace Samples
             return result;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The variable, tokenFactory is disposed on all paths.")]
         private static void Main(string[] arguments)
         {
             if (null == arguments)
@@ -176,7 +178,32 @@ namespace Samples
             {
                 this.userNameValue = AzureHubClientTokenFactory.Secure(userName);
                 this.passwordValue = AzureHubClientTokenFactory.Secure(password);
-                this.innerFactory =  this.InitializeTokenFactory();
+                this.innerFactory = this.InitializeTokenFactory();
+            }
+
+            private AzureHubClientTokenFactory(AzureHubClientTokenFactory other)
+                : this(AzureHubClientTokenFactory.Read(other?.userNameValue), AzureHubClientTokenFactory.Read(other?.passwordValue))
+            {
+            }
+
+            public override TokenFactory Clone()
+            {
+                TokenFactory result = null;
+                try
+                {
+                    result = new AzureHubClientTokenFactory(this);
+                    return result;
+                }
+                catch
+                {
+                    if (result != null)
+                    {
+                        result.Dispose();
+                        result = null;
+                    }
+
+                    throw;
+                }
             }
 
             protected override void Dispose(bool disposing)
@@ -238,12 +265,13 @@ namespace Samples
                 }
             }
 
-            public override SecureString CreateToken()
+            public override IAzureTenantToken CreateTenantToken()
             {
-                SecureString result = null;
+                IAzureTenantToken result = null;
                 try
                 {
-                    result = this.innerFactory.CreateToken();
+                    result = this.innerFactory.CreateTenantToken();
+                    return result;
                 }
                 catch
                 {
@@ -255,7 +283,26 @@ namespace Samples
 
                     throw;
                 }
-                return result;
+            }
+
+            public override SecureString CreateToken()
+            {
+                SecureString result = null;
+                try
+                {
+                    result = this.innerFactory.CreateToken();
+                    return result;
+                }
+                catch
+                {
+                    if (result != null)
+                    {
+                        result.Dispose();
+                        result = null;
+                    }
+
+                    throw;
+                }
             }
 
             private TokenFactory InitializeTokenFactory()
@@ -279,7 +326,26 @@ namespace Samples
 
             }
 
-            public static SecureString Secure(string value)
+            private static string Read(SecureString value)
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
+                IntPtr buffer = IntPtr.Zero;
+                try
+                {
+                    buffer = Marshal.SecureStringToGlobalAllocUnicode(value);
+                    return Marshal.PtrToStringUni(buffer, value.Length);
+                }
+                finally
+                {
+                    Marshal.ZeroFreeGlobalAllocUnicode(buffer);
+                }
+            }
+
+            private static SecureString Secure(string value)
             {
                 if (value == null)
                 {

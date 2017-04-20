@@ -49,6 +49,10 @@
       <HintPath>$(PkgMicrosoft_AspNet_SignalR_SystemWeb)\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Azure.ActiveDirectory.Client.Framework, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <HintPath>$(PkgMicrosoft_SystemForCrossDomainIdentityManagement)\lib\net45\Microsoft.Azure.ActiveDirectory.Client.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Graph.Provisioning, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>$(PkgMicrosoft_SystemForCrossDomainIdentityManagement)\lib\net45\Microsoft.Graph.Provisioning.dll</HintPath>
       <Private>True</Private>
@@ -94,7 +98,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>$(PkgMicrosoft_Owin_Host_SystemWeb_2_1_0)\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <HintPath>$(PkgMicrosoft_Owin_Host_SystemWeb_2_1_0_0)\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Hosting, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -138,7 +142,7 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Validation.14.0.50702\lib\net45\Microsoft.VisualStudio.Validation.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>$(PkgNewtonsoft_Json_6_0_6)\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(PkgNewtonsoft_Json_6_0_6_0)\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -148,7 +152,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>$(PkgSystem_IdentityModel_Tokens_Jwt_4_0_0)\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <HintPath>$(PkgSystem_IdentityModel_Tokens_Jwt_4_0_0_0)\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http">
