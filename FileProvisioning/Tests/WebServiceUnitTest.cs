@@ -15,6 +15,23 @@ namespace Samples
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftIdentityModelActiveDirectory)]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwin)]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinHostHttpListener)]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinHosting)]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurity)]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityActiveDirectory)]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityJavaScriptWebTokens)]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityOpenStandardForAuthorization)]
+    [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftVisualStudioValidation)]
+    [DeploymentItem(WebServiceUnitTest.FileNameNewtonsoft)]
+    [DeploymentItem(WebServiceUnitTest.FileNameOwin)]
+    [DeploymentItem(WebServiceUnitTest.FileNameSystemIdentityModelTokensJavaScriptWebTokens)]
+    [DeploymentItem(WebServiceUnitTest.FileNameSystemNetHypertextMarkupLanguageFormatting)]
+    [DeploymentItem(WebServiceUnitTest.FileNameSystemWeb)]
+    [DeploymentItem(WebServiceUnitTest.FileNameSystemWebExtensions)]
+    [DeploymentItem(WebServiceUnitTest.FileNameSystemWebHypertextMarkupLanguage)]
+    [DeploymentItem(WebServiceUnitTest.FileNameSystemWebOwin)]
     public class WebServiceUnitTest
     {
         private const string AddressBase = "http://localhost:9000";
@@ -30,22 +47,23 @@ namespace Samples
 
         private const string ContentTypeJson = "application/json";
 
-        public const string FileNameMicrosoftIdentityModelActiveDirectory = "Microsoft.IdentityModel.Clients.ActiveDirectory.dll";
-        public const string FileNameMicrosoftOwin = "Microsoft.Owin.dll";
-        public const string FileNameMicrosoftOwinHostHttpListener = "Microsoft.Owin.Host.HttpListener.dll";
-        public const string FileNameMicrosoftOwinHosting = "Microsoft.Owin.Hosting.dll";
-        public const string FileNameMicrosoftOwinSecurity = "Microsoft.Owin.Security.dll";
-        public const string FileNameMicrosoftOwinSecurityActiveDirectory = "Microsoft.Owin.Security.ActiveDirectory.dll";
-        public const string FileNameMicrosoftOwinSecurityJavaScriptWebTokens = "Microsoft.Owin.Security.Jwt.dll";
-        public const string FileNameMicrosoftOwinSecurityOpenStandardForAuthorization = "Microsoft.Owin.Security.OAuth.dll";
-        public const string FileNameNewtonsoft = "Newtonsoft.Json.dll";
-        public const string FileNameOwin = "Owin.dll";
-        public const string FileNameSystemIdentityModelTokensJavaScriptWebTokens = "System.IdentityModel.Tokens.Jwt.dll";
-        public const string FileNameSystemNetHypertextMarkupLanguageFormatting = "System.Net.Http.Formatting.dll";
-        public const string FileNameSystemWeb = "System.Web.dll";
-        public const string FileNameSystemWebExtensions = "System.Web.Extensions.dll";
-        public const string FileNameSystemWebHypertextMarkupLanguage = "System.Web.Http.dll";
-        public const string FileNameSystemWebOwin = "System.Web.Http.Owin.dll";
+        private const string FileNameMicrosoftIdentityModelActiveDirectory = "Microsoft.IdentityModel.Clients.ActiveDirectory.dll";
+        private const string FileNameMicrosoftOwin = "Microsoft.Owin.dll";
+        private const string FileNameMicrosoftOwinHostHttpListener = "Microsoft.Owin.Host.HttpListener.dll";
+        private const string FileNameMicrosoftOwinHosting = "Microsoft.Owin.Hosting.dll";
+        private const string FileNameMicrosoftOwinSecurity = "Microsoft.Owin.Security.dll";
+        private const string FileNameMicrosoftOwinSecurityActiveDirectory = "Microsoft.Owin.Security.ActiveDirectory.dll";
+        private const string FileNameMicrosoftOwinSecurityJavaScriptWebTokens = "Microsoft.Owin.Security.Jwt.dll";
+        private const string FileNameMicrosoftOwinSecurityOpenStandardForAuthorization = "Microsoft.Owin.Security.OAuth.dll";
+        private const string FileNameMicrosoftVisualStudioValidation = "Microsoft.VisualStudio.Validation.dll";
+        private const string FileNameNewtonsoft = "Newtonsoft.Json.dll";
+        private const string FileNameOwin = "Owin.dll";
+        private const string FileNameSystemIdentityModelTokensJavaScriptWebTokens = "System.IdentityModel.Tokens.Jwt.dll";
+        private const string FileNameSystemNetHypertextMarkupLanguageFormatting = "System.Net.Http.Formatting.dll";
+        private const string FileNameSystemWeb = "System.Web.dll";
+        private const string FileNameSystemWebExtensions = "System.Web.Extensions.dll";
+        private const string FileNameSystemWebHypertextMarkupLanguage = "System.Web.Http.dll";
+        private const string FileNameSystemWebOwin = "System.Web.Http.Owin.dll";
 
         private const string MethodDelete = "DELETE";
 
@@ -61,22 +79,6 @@ namespace Samples
         [TestMethod]
         [TestCategory(TestCategory.Sample)]
         [TestCategory(TestCategory.WebService)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftIdentityModelActiveDirectory)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwin)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinHostHttpListener)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinHosting)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurity)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityActiveDirectory)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityJavaScriptWebTokens)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityOpenStandardForAuthorization)]
-        [DeploymentItem(WebServiceUnitTest.FileNameNewtonsoft)]
-        [DeploymentItem(WebServiceUnitTest.FileNameOwin)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemIdentityModelTokensJavaScriptWebTokens)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemNetHypertextMarkupLanguageFormatting)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemWeb)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemWebExtensions)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemWebHypertextMarkupLanguage)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemWebOwin)]
         public void TestCreateUser()
         {
             Uri resourceBase = new Uri(WebServiceUnitTest.AddressBase);
@@ -164,22 +166,6 @@ namespace Samples
         [TestMethod]
         [TestCategory(TestCategory.Sample)]
         [TestCategory(TestCategory.WebService)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftIdentityModelActiveDirectory)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwin)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinHostHttpListener)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinHosting)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurity)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityActiveDirectory)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityJavaScriptWebTokens)]
-        [DeploymentItem(WebServiceUnitTest.FileNameMicrosoftOwinSecurityOpenStandardForAuthorization)]
-        [DeploymentItem(WebServiceUnitTest.FileNameNewtonsoft)]
-        [DeploymentItem(WebServiceUnitTest.FileNameOwin)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemIdentityModelTokensJavaScriptWebTokens)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemNetHypertextMarkupLanguageFormatting)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemWeb)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemWebExtensions)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemWebHypertextMarkupLanguage)]
-        [DeploymentItem(WebServiceUnitTest.FileNameSystemWebOwin)]
         public void TestRetrieveGroup()
         {
             Uri resourceBase = new Uri(WebServiceUnitTest.AddressBase);
