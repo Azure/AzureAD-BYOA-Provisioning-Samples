@@ -50,15 +50,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Azure.ActiveDirectory.Client.Framework, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.Azure.ActiveDirectory.Client.Framework.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.Azure.ActiveDirectory.Client.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Graph.Provisioning, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.Graph.Provisioning.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.Graph.Provisioning.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Graph.Provisioning.Client, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.Graph.Provisioning.Client.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.Graph.Provisioning.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.22.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -70,23 +70,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Online.Coexistence.Provision, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.Online.Coexistence.Provision.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.Online.Coexistence.Provision.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Online.Coexistence.Schema, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.Online.Coexistence.Schema.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.Online.Coexistence.Schema.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Online.Coexistence.Security, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.Online.Coexistence.Security.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.Online.Coexistence.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Online.DirSync.Common, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.Online.DirSync.Common.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.Online.DirSync.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Online.DirSync.ResAgent, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.Online.DirSync.ResAgent.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.Online.DirSync.ResAgent.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -122,15 +122,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Protocol, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Protocol.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Protocol.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Schemas, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Schemas.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Schemas.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.SystemForCrossDomainIdentityManagement.Service, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.87\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Service.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\CxCache\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.89\lib\net45\Microsoft.SystemForCrossDomainIdentityManagement.Service.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Threading, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

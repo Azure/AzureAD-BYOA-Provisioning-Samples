@@ -13,8 +13,11 @@ namespace Samples
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
+    [DeploymentItem(CommaDelimitedFileUnitTest.DeploymentItemMicrosoftVisualStudioValidation)]
     public class CommaDelimitedFileUnitTest
     {
+        private const string DeploymentItemMicrosoftVisualStudioValidation = "Microsoft.VisualStudio.Validation.dll";
+
         private const string FileNameExtensionCommaSeparatedValues = "csv";
 
         private const int CountColumns = 5;

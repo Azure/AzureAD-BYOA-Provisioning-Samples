@@ -11,8 +11,11 @@ namespace Samples
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
+    [DeploymentItem(FileProviderUnitTest.DeploymentItemMicrosoftVisualStudioValidation)]
     public class FileProviderUnitTest: ProviderTestTemplate<FileProviderBase>
     {
+        private const string DeploymentItemMicrosoftVisualStudioValidation = "Microsoft.VisualStudio.Validation.dll";
+
         public override FileProviderBase CreateProvider()
         {
             FileProviderBase result = null;
