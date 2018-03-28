@@ -1,18 +1,18 @@
 # Microsoft Azure Active Directory ![alt text](http://www.simplecloud.info/img/logo/SCIM_B-and-W_72x24.png) Guidelines 
 
-## General Operation Guidelines
+## General Guidelines
 * Microsoft recommends following [SCIM 2.0 standard](http://www.simplecloud.info/#Specification).
 * `id` is a required property for all the resources; except for `ListResponse` with zero members.
 * Response of a query/filter request should always be a `ListResponse`.
 * Groups shall only be supported if the SCIM implementation supports PATCH.
-* Microsoft Azure AD only uses the following comparison operations  
+* It is not necessary to include the entire resource in the PATCH response.
+* Microsoft Azure AD only uses the following operators  
      - `eq`
      - `and`
 
 ## User Operations
 
-* Uses should be queryable by `userName` or `email[type eq "work"]`. For any other queryable attributes, please contact anchheda@microsoft.com.
-* It is not necessary to include the object in the PATCH response.
+* Usres should be query-able by `userName` or `email[type eq "work"]`. For any other query-able attributes, please contact [anchheda@microsoft.com](mailto:anchheda@microsoft.com).
 
 ### Create User
 
@@ -260,6 +260,7 @@
 ## Group Operations
 
 * Groups shall always be created with empty members list.
+* Groups should be query-able by the `displayName`.
 * Update to the group PATCH should yield an *HTTP 204 No Content*. Returning a body with a list of all the members is not supported.
 * It is not necessary to support returning all the members of the group.
 
