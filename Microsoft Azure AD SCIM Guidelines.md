@@ -171,16 +171,16 @@ Reference : [Customizing User Provisioning Attribute Mappings](https://docs.micr
 {
 	"schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
 	"Operations": [
-    	{
+            {
     		"op": "Replace",
     		"path": "emails[type eq \"work\"].value",
     		"value": "updatedEmail@microsoft.com"
-    	},
-    	{
+    	    },
+    	    {
     		"op": "Replace",
     		"path": "name.familyName",
     		"value": "updatedFamilyName"
-    	}
+    	    }
 	]
 }
 ```
