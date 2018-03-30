@@ -1,18 +1,21 @@
-# Microsoft Azure Active Directory ![alt text](http://www.simplecloud.info/img/logo/SCIM_B-and-W_72x24.png) Guidelines 
+# Microsoft Azure Active Directory ![](http://www.simplecloud.info/img/logo/SCIM_B-and-W_72x24.png) Guidelines 
 
 ## General Guidelines
-* Microsoft recommends following [SCIM 2.0 standard](http://www.simplecloud.info/#Specification).
+* Microsoft recommends following the [SCIM 2.0 standard](http://www.simplecloud.info/#Specification).
 * `id` is a required property for all the resources; except for `ListResponse` with zero members.
-* Response of a query/filter request should always be a `ListResponse`.
-* Groups shall only be supported if the SCIM implementation supports PATCH.
+* Response to a query/filter request should always be a `ListResponse`.
+* Groups are only supported if the SCIM implementation supports PATCH requests.
 * It is not necessary to include the entire resource in the PATCH response.
 * Microsoft Azure AD only uses the following operators  
      - `eq`
      - `and`
+* Microsoft Azure AD makes requests to fetch a random user and group to ensure that the endpoint and the credentials are valid. It is also done as a part of **Test Connection** flow in the [Azure portal](https://portal.azure.com). 
+* The attribute that the resources can be queried on should be set as a matching attribute on the application in the [Azure portal](https://portal.azure.com).<br> 
+Reference : [Customizing User Provisioning Attribute Mappings](https://docs.microsoft.com/en-us/azure/active-directory/active-directory-saas-customizing-attribute-mappings)
 
 ## User Operations
 
-* Usres should be query-able by `userName` or `email[type eq "work"]`. For any other query-able attributes, please contact [anchheda@microsoft.com](mailto:anchheda@microsoft.com).
+* Users can be queried by `userName` or `email[type eq "work"]` attributes. For queries using another attribute, please contact [anchheda@microsoft.com](mailto:anchheda@microsoft.com). 
 
 ### Create User
 
@@ -61,7 +64,7 @@
 		"familyName": "familyName",
 		"givenName": "givenName",
 	},
-	"active": true
+	"active": true,
 	"emails": [{
 		"value": "Test_User_fd0ea19b-0777-472c-9f96-4f70d2226f2e@testuser.com",
 		"type": "work",
@@ -167,15 +170,18 @@
 ```json
 {
 	"schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
-	"Operations": [{
-		"op": "Replace",
-		"path": "emails[type eq \"work\"].value",
-		"value": "updatedEmail@microsoft.com"
-	}, {
-		"op": "Replace",
-		"path": "name.familyName",
-		"value": "updatedFamilyName"
-	}]
+	"Operations": [
+    	{
+    		"op": "Replace",
+    		"path": "emails[type eq \"work\"].value",
+    		"value": "updatedEmail@microsoft.com"
+    	},
+    	{
+    		"op": "Replace",
+    		"path": "name.familyName",
+    		"value": "updatedFamilyName"
+    	}
+	]
 }
 ```
 
@@ -259,9 +265,9 @@
 
 ## Group Operations
 
-* Groups shall always be created with empty members list.
-* Groups should be query-able by the `displayName`.
-* Update to the group PATCH should yield an *HTTP 204 No Content*. Returning a body with a list of all the members is not supported.
+* Groups shall always be created with an empty members list.
+* Groups can be queried by the `displayName` attribute.
+* Update to the group PATCH request should yield an *HTTP 204 No Content* in the response. Returning a body with a list of all the members is not advisable.
 * It is not necessary to support returning all the members of the group.
 
 ### Create Group
