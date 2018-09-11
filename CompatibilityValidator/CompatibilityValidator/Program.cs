@@ -44,7 +44,7 @@ namespace Tools
             "]." +
             AttributeNames.PostalCode;
 
-        // emails[type eq "Work" and Primary eq true]
+        // emails[type eq "Work" and Primary eq true].value
         public const string PathExpressionPrimaryWorkElectronicMailAddress =
             AttributeNames.ElectronicMailAddresses +
             "[" + AttributeNames.Type +
@@ -52,7 +52,7 @@ namespace Tools
             ElectronicMailAddress.Work +
             "\" and " +
             AttributeNames.Primary +
-            " eq true]";
+            " eq true].value";
 
         private static readonly Lazy<JavaScriptSerializer> Serializer =
             new Lazy<JavaScriptSerializer>(
