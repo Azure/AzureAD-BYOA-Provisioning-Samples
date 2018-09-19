@@ -308,7 +308,7 @@ Reference : [Customizing User Provisioning Attribute Mappings](https://docs.micr
 ### Delete User
 
 ##### Request
-*DELETE /User/5171a35d82074e068ce2 HTTP/1.1*
+*DELETE /Users/5171a35d82074e068ce2 HTTP/1.1*
 
 ##### Response
 *HTTP/1.1 204 No Content*
