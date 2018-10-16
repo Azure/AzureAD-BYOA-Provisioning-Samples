@@ -9,11 +9,11 @@ namespace Samples
     internal interface ISampleComposer
     {
         GroupBase ComposeGroupResource();
-        PatchRequest2 ComposeReferencePatch(
+        PatchRequest2Legacy ComposeReferencePatch(
             string referenceAttributeName,
             string referencedObjectUniqueIdentifier,
             OperationName operationName);
-        PatchRequest2 ComposeUserPatch();
+        PatchRequest2Legacy ComposeUserPatch();
         Resource ComposeUserResource();
     }
 }

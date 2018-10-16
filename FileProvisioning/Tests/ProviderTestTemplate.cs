@@ -227,7 +227,7 @@ namespace Samples
                 new Func<ProviderBase, Task>(
                     async (ProviderBase provider) =>
                     {
-                        PatchRequest2 patchRequest = SampleComposer.Instance.ComposeUserPatch();
+                        PatchRequest2Legacy patchRequest = SampleComposer.Instance.ComposeUserPatch();
 
                         string correlationIdentifierCreate = Guid.NewGuid().ToString();
 
@@ -280,7 +280,7 @@ namespace Samples
                         Assert.IsFalse(string.IsNullOrWhiteSpace(managerResource.Identifier));
 
                         IPatch patch;
-                        PatchRequest2 patchRequest;
+                        PatchRequest2Legacy patchRequest;
                         IResourceIdentifier resourceIdentifier;
 
                         resourceIdentifier =
@@ -400,7 +400,7 @@ namespace Samples
                         Assert.IsFalse(string.IsNullOrWhiteSpace(memberResource.Identifier));
 
                         IPatch patch;
-                        PatchRequest2 patchRequest;
+                        PatchRequest2Legacy patchRequest;
                         IResourceIdentifier resourceIdentifier;
 
                         resourceIdentifier =

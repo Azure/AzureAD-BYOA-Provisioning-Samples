@@ -45,7 +45,7 @@ namespace Samples
 
             if (this.Row.Columns.TryGetValue(AttributeNames.Department, out value))
             {
-                resource.Department = value;
+                resource.EnterpriseExtension.Department = value;
             }
 
             if (this.Row.Columns.TryGetValue(AttributeNames.DisplayName, out value))
@@ -65,7 +65,7 @@ namespace Samples
 
             if (this.Row.Columns.TryGetValue(AttributeNames.Manager, out value))
             {
-                resource.Manager = 
+                resource.EnterpriseExtension.Manager = 
                     new Manager()
                         {
                             Value = value
@@ -73,7 +73,7 @@ namespace Samples
             }
 
             string familyName;
-            if (this.Row.Columns.TryGetValue(AttributeNames.ExternalIdentifier, out value))
+            if (this.Row.Columns.TryGetValue(AttributeNames.FamilyName, out value))
             {
                 familyName = value;
             }

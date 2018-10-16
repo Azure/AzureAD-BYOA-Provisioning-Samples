@@ -33,6 +33,8 @@ build.evt
 **/bins/**
 **/target/**
 **/_ReSharper*.dirs/**
+**/*.js
+**/.vs/**
 
 #Nuget Packages Folder
 **/packages/*

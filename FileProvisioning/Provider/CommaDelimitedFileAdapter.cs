@@ -83,10 +83,12 @@ Format=CSVDelimited";
             this.pathFolder = System.IO.Path.GetDirectoryName(this.FilePath);
             if (!Directory.Exists(this.pathFolder))
             {
-                Directory.CreateDirectory(pathFolder);
+                Directory.CreateDirectory(this.pathFolder);
             }
-            this.fileName = System.IO.Path.GetFileName(FilePath);
-            this.pathSchema = System.IO.Path.Combine(this.pathFolder, CommaDelimitedFileAdapter.SchemaFileName);
+            this.fileName = System.IO.Path.GetFileName(this.FilePath);
+            this.pathSchema =
+                System.IO.Path.Combine(this.pathFolder, 
+                CommaDelimitedFileAdapter.SchemaFileName);
             this.schema = 
                 string.Format(
                     CultureInfo.InvariantCulture,
@@ -100,7 +102,7 @@ Format=CSVDelimited";
                     CultureInfo.InvariantCulture,
                     CommaDelimitedFileAdapter.ConnectionStringTemplate,
                     providerName,
-                    pathFolder);
+                    this.pathFolder);
 
             this.connection = new OleDbConnection(connectionString);
             this.connection.Open();
@@ -386,7 +388,7 @@ Format=CSVDelimited";
             OleDbCommand commandQuery = null;
             try
             {
-                commandQuery = new OleDbCommand(query, connection);
+                commandQuery = new OleDbCommand(query, this.connection);
                 DbDataReader reader = null;
                 try
                 {
@@ -452,12 +454,13 @@ Format=CSVDelimited";
 
             string keyNormalized = new Value(key).ToString();
 
+            string keyNormalized1 = keyNormalized;
             Dictionary<string, string> columns =
                 new Dictionary<string, string>()
                     {
                         {
                             this.columnNameKey,
-                            keyNormalized
+                            keyNormalized1
                         }
                     };
             IReadOnlyCollection<IRow> queryResults = await this.Query(columns);
