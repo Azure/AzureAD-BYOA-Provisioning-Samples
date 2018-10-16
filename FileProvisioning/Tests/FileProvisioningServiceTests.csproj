@@ -187,7 +187,6 @@
     <Compile Include="CommaDelimitedFileUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="App.config" />
-    <None Include="packages.config" />
     <None Include="Scripts\jquery-3.3.1.min.map" />
     <None Include="Scripts\jquery-3.3.1.slim.min.map" />
   </ItemGroup>
