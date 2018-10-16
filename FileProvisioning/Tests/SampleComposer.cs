@@ -68,7 +68,7 @@ namespace Samples
             return result;
         }
 
-        public PatchRequest2 ComposeReferencePatch(
+        public PatchRequest2Legacy ComposeReferencePatch(
             string referenceAttributeName,
             string referencedObjectUniqueIdentifier,
             OperationName operationName)
@@ -83,28 +83,28 @@ namespace Samples
                 {
                     Value = referencedObjectUniqueIdentifier
                 };
-            PatchOperation operation =
-                new PatchOperation()
+            PatchOperation2 operation =
+                new PatchOperation2()
                 {
                     Name = operationName,
                     Path = path
                 };
             operation.AddValue(operationValue);
 
-            PatchRequest2 result = new PatchRequest2();
+            PatchRequest2Legacy result = new PatchRequest2Legacy();
             result.AddOperation(operation);
             return result;
         }
 
-        public PatchRequest2 ComposeUserPatch()
+        public PatchRequest2Legacy ComposeUserPatch()
         {
             string value = Guid.NewGuid().ToString(SampleComposer.FormatUniqueIdentifierCompressed);
 
             IPath path;
-            PatchOperation operation;
+            PatchOperation2 operation;
             OperationValue operationValue;
 
-            PatchRequest2 result = new PatchRequest2();
+            PatchRequest2Legacy result = new PatchRequest2Legacy();
 
             Assert.IsTrue(Path.TryParse(AttributeNames.Active, out path));
             operationValue =
@@ -113,7 +113,7 @@ namespace Samples
                     Value = bool.FalseString
                 };
             operation =
-                new PatchOperation()
+                new PatchOperation2()
                 {
                     Name = OperationName.Replace,
                     Path = path
@@ -128,7 +128,7 @@ namespace Samples
                     Value = value
                 };
             operation =
-                new PatchOperation()
+                new PatchOperation2()
                 {
                     Name = OperationName.Replace,
                     Path = path
@@ -148,7 +148,7 @@ namespace Samples
                     Value = electronicMailAddressValue
                 };
             operation =
-                new PatchOperation()
+                new PatchOperation2()
                 {
                     Name = OperationName.Replace,
                     Path = path
@@ -163,7 +163,7 @@ namespace Samples
                     Value = value
                 };
             operation =
-                new PatchOperation()
+                new PatchOperation2()
                 {
                     Name = OperationName.Replace,
                     Path = path

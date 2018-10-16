@@ -137,7 +137,9 @@ namespace Samples
             }
         }
 
-        private static IReadOnlyDictionary<string, string> Apply(PatchRequest2 patch, string schemaIdentifier, IRow row)
+        private static IReadOnlyDictionary<string, string> Apply(
+            PatchRequest2Base<PatchOperation2> patch, 
+            string schemaIdentifier, IRow row)
         {
             if (null == patch)
             {
@@ -154,10 +156,6 @@ namespace Samples
             {
                 case SchemaIdentifiers.Core2EnterpriseUser:
                     result = FileProvider.PatchUser(patch, row);
-                    return result;
-
-                case DynamicConstants.SchemaIdentifierUser:
-                    result = FileProvider.PatchDynamicUser(patch, row);
                     return result;
 
                 case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
@@ -366,46 +364,7 @@ namespace Samples
         {
         }
 
-        private static IReadOnlyDictionary<string, string> PatchDynamicUser(PatchRequest2 patch, IRow row)
-        {
-            DynamicUser dynamicUser = new DynamicUserFactory(row).Create();
-            Dictionary<string, string> result =
-                new DynamicUserColumnsFactory(dynamicUser)
-                .CreateColumns()
-                .ToDictionary(
-                    (KeyValuePair<string, string> item) =>
-                        item.Key,
-                    (KeyValuePair<string, string> item) =>
-                        item.Value);
-            if (null == patch.Operations || !patch.Operations.Any())
-            {
-                return result;
-            }
-
-            foreach (PatchOperation operation in patch.Operations)
-            {
-                if (string.IsNullOrWhiteSpace(operation?.Path?.AttributePath))
-                {
-                    continue;
-                }
-
-                string updatedValue = operation.Value.First().Value;
-
-                string originalValue;
-                if (!result.TryGetValue(operation.Path.AttributePath, out originalValue))
-                {
-                    result.Add(operation.Path.AttributePath, updatedValue);
-                }
-                else
-                {
-                    result[operation.Path.AttributePath] = updatedValue;
-                }
-            }
-
-            return result;
-        }
-
-        private static IReadOnlyDictionary<string, string> PatchGroup(PatchRequest2 patch, IRow row)
+        private static IReadOnlyDictionary<string, string> PatchGroup(PatchRequest2Base<PatchOperation2> patch, IRow row)
         {
             ResourceFactory<WindowsAzureActiveDirectoryGroup> groupFactory = new GroupFactory(row);
             WindowsAzureActiveDirectoryGroup group = groupFactory.Create();
@@ -415,7 +374,7 @@ namespace Samples
             return result;
         }
 
-        private static IReadOnlyDictionary<string, string> PatchUser(PatchRequest2 patch, IRow row)
+        private static IReadOnlyDictionary<string, string> PatchUser(PatchRequest2Base<PatchOperation2> patch, IRow row)
         {
             ResourceFactory<Core2EnterpriseUser> userFactory = new UserFactory(row);
             Core2EnterpriseUser user = userFactory.Create();
@@ -795,13 +754,6 @@ namespace Samples
                 return result;
             }
 
-            DynamicUser dynamicUser = resource as DynamicUser;
-            if (dynamicUser != null)
-            {
-                ColumnsFactory result = new DynamicUserColumnsFactory(dynamicUser);
-                return result;
-            }
-
             string unsupportedSchema =
                         string.Join(
                             Environment.NewLine,
@@ -822,13 +774,6 @@ namespace Samples
             if (user != null)
             {
                 ResourceFactory result = new UserFactory(row);
-                return result;
-            }
-
-            DynamicUser dynamicUser = resource as DynamicUser;
-            if (dynamicUser != null)
-            {
-                ResourceFactory result = new DynamicUserFactory(row);
                 return result;
             }
 
@@ -854,9 +799,6 @@ namespace Samples
                     break;
                 case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
                     resourceFactory = new GroupFactory(row);
-                    break;
-                case DynamicConstants.SchemaIdentifierUser:
-                    resourceFactory = new DynamicUserFactory(row);
                     break;
                 default:
                     throw new NotSupportedException(schemaIdentifier);
@@ -895,7 +837,9 @@ namespace Samples
                     patch.ResourceIdentifier.Identifier);
             this.Monitor.Inform(notification);
 
-            PatchRequest2 patchRequest = patch.PatchRequest as PatchRequest2;
+            PatchRequest2Base<PatchOperation2> patchRequest = 
+                patch.PatchRequest as PatchRequest2Base<PatchOperation2>;
+
             if (null == patchRequest)
             {
                 string unsupportedPatchTypeName = patch.GetType().FullName;
@@ -957,7 +901,7 @@ namespace Samples
                 throw new ArgumentException(FileProviderResources.ExceptionInvalidPatch);
             }
 
-            PatchRequest2 patchRequest = patch.PatchRequest as PatchRequest2;
+            PatchRequest2Legacy patchRequest = patch.PatchRequest as PatchRequest2Legacy;
             if (null == patchRequest)
             {
                 string unsupportedPatchTypeName = patch.GetType().FullName;
@@ -977,11 +921,11 @@ namespace Samples
                 return;
             }
 
-            IReadOnlyCollection<PatchOperation> memberOperations =
+            IReadOnlyCollection<PatchOperation2> memberOperations =
                 patchRequest
                 .Operations
                 .Where(
-                    (PatchOperation item) =>
+                    (PatchOperation2 item) =>
                             item.Path != null
                         && string.Equals(item.Path.AttributePath, AttributeNames.Members, StringComparison.Ordinal))
                 .ToArray();
@@ -990,7 +934,7 @@ namespace Samples
                 return;
             }
 
-            foreach (PatchOperation memberOperation in memberOperations)
+            foreach (PatchOperation2 memberOperation in memberOperations)
             {
                 if (null == memberOperation.Value)
                 {
