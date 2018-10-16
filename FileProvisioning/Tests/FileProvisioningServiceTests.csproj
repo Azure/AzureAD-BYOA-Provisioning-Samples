@@ -50,14 +50,14 @@
       <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.3.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.ActiveDirectory.Client.Framework, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.95\lib\net45\Microsoft.Azure.ActiveDirectory.Client.Framework.dll</HintPath>
+      <HintPath>..\Static References\Microsoft.Azure.ActiveDirectory.Client.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Graph.Provisioning, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.95\lib\net45\Microsoft.Graph.Provisioning.dll</HintPath>
+      <HintPath>..\Static References\Microsoft.Graph.Provisioning.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Graph.Provisioning.Client, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.95\lib\net45\Microsoft.Graph.Provisioning.Client.dll</HintPath>
+      <HintPath>..\Static References\Microsoft.Graph.Provisioning.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.19.8.16603, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.19.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
@@ -75,19 +75,19 @@
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.3.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Online.Coexistence.Provision, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.95\lib\net45\Microsoft.Online.Coexistence.Provision.dll</HintPath>
+      <HintPath>..\Static References\Microsoft.Online.Coexistence.Provision.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Online.Coexistence.Schema, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.95\lib\net45\Microsoft.Online.Coexistence.Schema.dll</HintPath>
+      <HintPath>..\Static References\Microsoft.Online.Coexistence.Schema.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Online.Coexistence.Security, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.95\lib\net45\Microsoft.Online.Coexistence.Security.dll</HintPath>
+      <HintPath>..\Static References\Microsoft.Online.Coexistence.Security.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Online.DirSync.Common, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.95\lib\net45\Microsoft.Online.DirSync.Common.dll</HintPath>
+      <HintPath>..\Static References\Microsoft.Online.DirSync.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Online.DirSync.ResAgent, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\packages\Microsoft.SystemForCrossDomainIdentityManagement.2.0.5.95\lib\net45\Microsoft.Online.DirSync.ResAgent.dll</HintPath>
+      <HintPath>..\Static References\Microsoft.Online.DirSync.ResAgent.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
@@ -136,7 +136,6 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\..\..\..\CxCache\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
