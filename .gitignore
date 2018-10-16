@@ -35,6 +35,7 @@ build.evt
 **/_ReSharper*.dirs/**
 **/*.js
 **/.vs/**
+**/*.map
 
 #Nuget Packages Folder
 **/packages/*
