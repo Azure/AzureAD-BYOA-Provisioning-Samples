@@ -30,7 +30,7 @@ namespace Samples
                 result.Add(AttributeNames.Addresses, serializedValue);
             }
 
-            if (!string.IsNullOrWhiteSpace(this.Resource.Department))
+            if (!string.IsNullOrWhiteSpace(this.Resource.EnterpriseExtension?.Department))
             {
                 result.Add(AttributeNames.Department, this.Resource.Department);
             }
@@ -52,9 +52,11 @@ namespace Samples
                 result.Add(AttributeNames.ExternalIdentifier, this.Resource.ExternalIdentifier);
             }
 
-            if (this.Resource.Manager != null && !string.IsNullOrWhiteSpace(this.Resource.Manager.Value))
+            if (
+                this.Resource.EnterpriseExtension?.Manager != null &&
+                !string.IsNullOrWhiteSpace(this.Resource.EnterpriseExtension.Manager.Value))
             {
-                result.Add(AttributeNames.Manager, this.Resource.Manager.Value);
+                result.Add(AttributeNames.Manager, this.Resource.EnterpriseExtension.Manager.Value);
             }
 
             if (this.Resource.Name != null)
