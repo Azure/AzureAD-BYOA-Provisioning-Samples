@@ -797,9 +797,10 @@ namespace Samples
                 case SchemaIdentifiers.Core2EnterpriseUser:
                     resourceFactory = new UserFactory(row);
                     break;
-                case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
-                    resourceFactory = new GroupFactory(row);
-                    break;
+                //TODO: Add Support for Groups later.
+                //case SchemaIdentifiers.WindowsAzureActiveDirectoryGroup:
+                //    resourceFactory = new GroupFactory(row);
+                //    break;
                 default:
                     throw new NotSupportedException(schemaIdentifier);
             }

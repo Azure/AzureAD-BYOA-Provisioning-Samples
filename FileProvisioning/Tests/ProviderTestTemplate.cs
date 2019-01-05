@@ -37,58 +37,6 @@ namespace Samples
         [TestMethod]
         [TestCategory(TestCategory.Provider)]
         [TestCategory(TestCategory.Sample)]
-        public async Task TestCreateGroup()
-        {
-            Func<ProviderBase, Task> testFunction =
-                new Func<ProviderBase, Task>(
-                    async (ProviderBase provider) =>
-                    {
-                        string correlationIdentifierCreate = Guid.NewGuid().ToString();
-
-                        IList<Member> members = new List<Member>(ProviderTestTemplate<TProvider>.CountMembers);
-                        for (int memberIndex = 0; memberIndex < ProviderTestTemplate<TProvider>.CountMembers; memberIndex++)
-                        {
-                            Resource userResource = SampleComposer.Instance.ComposeUserResource();
-                            userResource = await provider.CreateAsync(userResource, correlationIdentifierCreate);
-                            Assert.IsNotNull(userResource);
-                            Assert.IsFalse(string.IsNullOrWhiteSpace(userResource.Identifier));
-                            Member member =
-                                new Member()
-                                {
-                                    Value = userResource.Identifier
-                                };
-                            members.Add(member);
-                        }
-
-                        GroupBase group = SampleComposer.Instance.ComposeGroupResource();
-                        group.Members = members.ToArray();
-                        Resource groupResource = await provider.CreateAsync(group, correlationIdentifierCreate);
-                        Assert.IsNotNull(groupResource);
-                        Assert.IsFalse(string.IsNullOrWhiteSpace(groupResource.Identifier));
-
-                        IResourceIdentifier groupIdentifier =
-                            new ResourceIdentifier()
-                            {
-                                SchemaIdentifier = SchemaIdentifiers.WindowsAzureActiveDirectoryGroup,
-                                Identifier = groupResource.Identifier
-                            };
-                        IReadOnlyCollection<IResourceIdentifier> userIdentifiers =
-                            members
-                            .Select(
-                                (Member item) =>
-                                    new ResourceIdentifier()
-                                    {
-                                        SchemaIdentifier = SchemaIdentifiers.Core2EnterpriseUser,
-                                        Identifier = item.Value
-                                    })
-                            .ToArray();
-                    });
-            await this.RunTest(testFunction);
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategory.Provider)]
-        [TestCategory(TestCategory.Sample)]
         public async Task TestCreateUser()
         {
             Func<ProviderBase, Task> testFunction =
@@ -290,9 +238,12 @@ namespace Samples
                                 Identifier = reportResource.Identifier
                             };
 
+                        string attributePathEnterpriseUserExtensionManager =
+                            AttributeNames.ExtensionEnterpriseUser2 + SchemaConstants.SeparatorSchemaIdentifierAttribute + AttributeNames.Manager;
+
                         patchRequest =
                             SampleComposer.Instance.ComposeReferencePatch(
-                                AttributeNames.Manager,
+                                attributePathEnterpriseUserExtensionManager,
                                 managerResource.Identifier,
                                 OperationName.Replace);
 
@@ -342,7 +293,7 @@ namespace Samples
 
                         patchRequest =
                             SampleComposer.Instance.ComposeReferencePatch(
-                                AttributeNames.Manager,
+                                attributePathEnterpriseUserExtensionManager,
                                 managerResource.Identifier,
                                 OperationName.Remove);
 
@@ -374,125 +325,6 @@ namespace Samples
                         await provider.DeleteAsync(resourceIdentifier, correlationIdentifier);
                     });
             await this.RunTest(testFunction);
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategory.Provider)]
-        [TestCategory(TestCategory.Sample)]
-        public async Task TestUpdateMembers()
-        {
-            Func<ProviderBase, Task> testFunction =
-                new Func<ProviderBase, Task>(
-                    async (ProviderBase provider) =>
-                    {
-                        string correlationIdentifier;
-
-                        correlationIdentifier = Guid.NewGuid().ToString();
-                        Resource groupResource = SampleComposer.Instance.ComposeGroupResource();
-                        groupResource = await provider.CreateAsync(groupResource, correlationIdentifier);
-                        Assert.IsNotNull(groupResource);
-                        Assert.IsFalse(string.IsNullOrWhiteSpace(groupResource.Identifier));
-
-                        correlationIdentifier = Guid.NewGuid().ToString();
-                        Resource memberResource = SampleComposer.Instance.ComposeUserResource();
-                        memberResource = await provider.CreateAsync(memberResource, correlationIdentifier);
-                        Assert.IsNotNull(memberResource);
-                        Assert.IsFalse(string.IsNullOrWhiteSpace(memberResource.Identifier));
-
-                        IPatch patch;
-                        PatchRequest2Legacy patchRequest;
-                        IResourceIdentifier resourceIdentifier;
-
-                        resourceIdentifier =
-                            new ResourceIdentifier()
-                            {
-                                SchemaIdentifier = SchemaIdentifiers.WindowsAzureActiveDirectoryGroup,
-                                Identifier = groupResource.Identifier
-                            };
-
-                        patchRequest = SampleComposer.Instance.ComposeReferencePatch(
-                            AttributeNames.Members,
-                            memberResource.Identifier,
-                            OperationName.Add);
-
-                        patch =
-                            new Patch()
-                            {
-                                ResourceIdentifier = resourceIdentifier,
-                                PatchRequest = patchRequest
-                            };
-
-                        correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.UpdateAsync(patch, correlationIdentifier);
-
-                        string filter =
-                            string.Format(
-                                CultureInfo.InvariantCulture,
-                                ProviderTestTemplate<TProvider>.FilterByReferenceExpressionTemplate,
-                                groupResource.Identifier,
-                                AttributeNames.Members,
-                                memberResource.Identifier);
-                        IReadOnlyCollection<IFilter> filters = null;
-                        Assert.IsTrue(Filter.TryParse(filter, out filters));
-
-                        IReadOnlyCollection<string> requestedAttributes =
-                            new string[]
-                            {
-                                AttributeNames.Identifier
-                            };
-                        IReadOnlyCollection<string> excludedAttributes = new string[0];
-
-                        IQueryParameters queryParameters =
-                            new QueryParameters(
-                                    SchemaIdentifiers.WindowsAzureActiveDirectoryGroup,
-                                    ProtocolConstants.PathGroups,
-                                    filters,
-                                    requestedAttributes,
-                                    excludedAttributes);
-
-                        correlationIdentifier = Guid.NewGuid().ToString();
-
-                        IReadOnlyCollection<Resource> resources;
-
-                        resources = await provider.QueryAsync(queryParameters, correlationIdentifier);
-                        Assert.IsNotNull(resources);
-                        Assert.AreEqual(1, resources.Count);
-                        Assert.AreEqual(groupResource.Identifier, resources.Single().Identifier);
-
-                        patchRequest =
-                            SampleComposer.Instance.ComposeReferencePatch(
-                                AttributeNames.Members,
-                                memberResource.Identifier,
-                                OperationName.Remove);
-
-                        patch =
-                            new Patch()
-                            {
-                                ResourceIdentifier = resourceIdentifier,
-                                PatchRequest = patchRequest
-                            };
-
-                        correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.UpdateAsync(patch, correlationIdentifier);
-
-                        resources = await provider.QueryAsync(queryParameters, correlationIdentifier);
-                        Assert.IsNotNull(resources);
-                        Assert.AreEqual(0, resources.Count);
-
-                        correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.DeleteAsync(resourceIdentifier, correlationIdentifier);
-
-                        resourceIdentifier =
-                            new ResourceIdentifier()
-                            {
-                                SchemaIdentifier = SchemaIdentifiers.Core2EnterpriseUser,
-                                Identifier = memberResource.Identifier
-                            };
-
-                        correlationIdentifier = Guid.NewGuid().ToString();
-                        await provider.DeleteAsync(resourceIdentifier, correlationIdentifier);
-                    });
-            await this.RunTest(testFunction);
-        }
+        }        
     }
 }
