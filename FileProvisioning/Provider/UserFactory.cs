@@ -32,6 +32,8 @@ namespace Samples
                 return;
             }
 
+            resource.EnterpriseExtension = new ExtensionAttributeEnterpriseUser2();
+
             string value = null;
             if (this.Row.Columns.TryGetValue(AttributeNames.Active, out value))
             {

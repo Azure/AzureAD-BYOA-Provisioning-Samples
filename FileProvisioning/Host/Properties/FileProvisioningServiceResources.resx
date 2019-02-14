@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InformationBaseAddressTemplate" xml:space="preserve">
-    <value>Attempting to listen at this address: {0}.</value>
+    <value>Attempting to listen at this address: {0}/scim.</value>
   </data>
   <data name="InformationCommandLineArguments" xml:space="preserve">
     <value>FileSvc &lt;service base address&gt; &lt;target file path&gt;
@@ -126,7 +126,7 @@
 Here is an example: "FileSvc http://localhost:9000 TargetFile.csv."</value>
   </data>
   <data name="InformationServiceStartedTemplate" xml:space="preserve">
-    <value>The service is listening at this address: {0}.</value>
+    <value>The service is listening at this address: {0}/scim.</value>
   </data>
   <data name="PromptTerminate" xml:space="preserve">
     <value>Press any key to terminate this service.  </value>

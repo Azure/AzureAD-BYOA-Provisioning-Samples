@@ -94,6 +94,11 @@ namespace Samples
                 result.Add(AttributeNames.Title, this.Resource.Title);
             }
 
+            if (!string.IsNullOrWhiteSpace(this.Resource.UserName))
+            {
+                result.Add(AttributeNames.UserName, this.Resource.UserName);
+            }
+
             result.Add(AttributeNames.Schemas, SchemaIdentifiers.Core2EnterpriseUser);
 
             return result;
