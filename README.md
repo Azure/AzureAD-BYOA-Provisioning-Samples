@@ -1,6 +1,6 @@
 [![Build Status](https://ankitchheda.visualstudio.com/SCIMSamples/_apis/build/status/ankitC.AzureAD-BYOA-Provisioning-Samples)](https://ankitchheda.visualstudio.com/SCIMSamples/_build/latest?definitionId=1)
 
-##Getting Started
+## Getting Started
 
 Please see the following article for information on sample prerequisites and getting started:
 
